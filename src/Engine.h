@@ -1,0 +1,6 @@
+
+namespace AegisEngine
+{
+	class Engine :
+		
+}
