@@ -1,11 +1,15 @@
 add_rules("mode.debug", "mode.release")
+add_requires("glfw")
 
 set_policy("build.warning", true) -- show warnings
 set_warnings("all") -- warn about many things
 
-target("aegisengine")
+target("ligmengine")
     set_kind("static")
     set_languages("cxx17")
+
+    -- Adds GLFW to engine.
+    add_packages("glfw")
 
     -- Declare our engine's header path.
     -- This allows targets that depend on the engine to #include them.
@@ -19,7 +23,7 @@ target("helloworld")
     set_kind("binary")
     set_languages("cxx17")
 
-    add_deps("aegisengine")
+    add_deps("ligmengine")
 
     add_files("demo/helloworld.cpp")
 

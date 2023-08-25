@@ -1,6 +1,23 @@
+#include <GraphicsManager.h>
+#include <InputManager.h>
 
-namespace AegisEngine
+namespace Ligmengine
 {
-	class Engine :
-		
+
+	class Engine 
+	{
+		public:
+			GraphicsManager graphics;
+			InputManager input;
+
+			void Startup();
+
+			void Shutdown();
+
+			void RunGameLoop();
+
+	};
+	
+	inline Engine gEngine;
+
 }
