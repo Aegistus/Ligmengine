@@ -25,6 +25,10 @@ target("helloworld")
     set_kind("binary")
     set_languages("cxx17")
 
+    -- Adds required packages.
+    add_packages("glfw")
+    add_packages("spdlog")
+
     add_deps("ligmengine")
 
     add_files("demo/helloworld.cpp")

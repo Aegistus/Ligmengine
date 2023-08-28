@@ -9,11 +9,11 @@
 
 namespace Ligmengine
 {
-	void Engine::Startup()
+	void Engine::Startup(const UpdateCallback& callback)
 	{
 		graphics.Startup();
 		input.Startup();
-		RunGameLoop();
+		RunGameLoop(callback);
 	}
 
 	void Engine::Shutdown()
@@ -22,7 +22,7 @@ namespace Ligmengine
 		graphics.Shutdown();
 	}
 
-	void Engine::RunGameLoop()
+	void Engine::RunGameLoop(const UpdateCallback& callback)
 	{
 		while (true)
 		{
@@ -31,6 +31,7 @@ namespace Ligmengine
 			input.Update();
 			// UpdateCallback()
 			graphics.Draw();
+			callback();
 
 			// Manage timestep
 			double sleepTime = TIME_STEP - (glfwGetTime() - frameStart);

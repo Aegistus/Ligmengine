@@ -14,7 +14,7 @@ namespace Ligmengine
 		// We don't want GLFW to set up a graphics API.
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		// Create the window.
-		GLFWwindow* window = glfwCreateWindow(window_width, window_height, window_name, window_fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
+		window = glfwCreateWindow(window_width, window_height, window_name, window_fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
 		glfwSetWindowAspectRatio(window, window_width, window_height);
 		if (!window)
 		{
