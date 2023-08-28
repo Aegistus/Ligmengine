@@ -1,6 +1,7 @@
 #include <Engine.h>
 #include <thread>
 #include <chrono>
+#include <iostream>
 #include <Types.h>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
@@ -11,6 +12,7 @@ namespace Ligmengine
 	{
 		graphics.Startup();
 		input.Startup();
+		RunGameLoop();
 	}
 
 	void Engine::Shutdown()
@@ -23,12 +25,14 @@ namespace Ligmengine
 	{
 		while (true)
 		{
+			double frameStart = glfwGetTime();
 			input.Update();
 			// UpdateCallback()
 			graphics.Draw();
 
 			// Manage timestep
-			double timer = glfwGetTime();
+			double sleepTime = TIME_STEP - (glfwGetTime() - frameStart);
+			std::this_thread::sleep_for(std::chrono::duration<double>(sleepTime));
 		}
 	}
 }

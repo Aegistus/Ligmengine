@@ -3,8 +3,9 @@
 
 namespace Ligmengine
 {
+	static const float TIME_STEP = (1 / 60);
 
-	class Engine 
+	class Engine
 	{
 		public:
 			GraphicsManager graphics;
