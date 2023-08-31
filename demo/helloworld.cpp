@@ -11,6 +11,10 @@ int main(int argc, const char* argv[]) {
             {
                 std::cout << "TEST\n";
             }
+            if (gEngine.input.GetKey(InputCode::KEY_ESCAPE))
+            {
+                gEngine.quit = true;
+            }
         });
     return 0;
 }

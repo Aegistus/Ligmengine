@@ -24,8 +24,12 @@ namespace Ligmengine
 
 	void Engine::RunGameLoop(const UpdateCallback& callback)
 	{
-		while (true)
+		while (!quit)
 		{
+			if (glfwWindowShouldClose(graphics.window))
+			{
+				quit = true;
+			}
 			double frameStart = glfwGetTime();
 			spdlog::info(frameStart);
 			input.Update();

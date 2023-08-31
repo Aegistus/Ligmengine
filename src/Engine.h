@@ -7,12 +7,13 @@
 
 namespace Ligmengine
 {
-	static const float TIME_STEP = (1 / 60);
+	static const float TIME_STEP = ((float) 1 / 60);
 	typedef std::function<void()> UpdateCallback;
 
 	class Engine
 	{
 		public:
+			bool quit = false;
 			GraphicsManager graphics;
 			InputManager input;
 
