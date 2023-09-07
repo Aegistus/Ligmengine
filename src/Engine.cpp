@@ -9,10 +9,12 @@
 
 namespace Ligmengine
 {
-	void Engine::Startup(const UpdateCallback& callback)
+	void Engine::Startup(const UpdateCallback& startupCallback, const UpdateCallback& callback)
 	{
+		startupCallback();
 		graphics.Startup();
 		input.Startup();
+		soundManager.Startup();
 		RunGameLoop(callback);
 	}
 
@@ -20,6 +22,7 @@ namespace Ligmengine
 	{
 		input.Shutdown();
 		graphics.Shutdown();
+		soundManager.Shutdown();
 	}
 
 	void Engine::RunGameLoop(const UpdateCallback& callback)
@@ -31,9 +34,9 @@ namespace Ligmengine
 				quit = true;
 			}
 			double frameStart = glfwGetTime();
-			spdlog::info(frameStart);
+			//spdlog::info(frameStart);
 			input.Update();
-			// UpdateCallback()
+			// UpdateCallback
 			graphics.Draw();
 			callback();
 

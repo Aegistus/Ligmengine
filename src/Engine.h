@@ -2,6 +2,8 @@
 #include <functional>
 #include <GraphicsManager.h>
 #include <InputManager.h>
+#include <ResourceManager.h>
+#include <SoundManager.h>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
@@ -16,8 +18,10 @@ namespace Ligmengine
 			bool quit = false;
 			GraphicsManager graphics;
 			InputManager input;
+			ResourceManager resourceManager;
+			SoundManager soundManager;
 
-			void Startup(const UpdateCallback& callback);
+			void Startup(const UpdateCallback& startupCallback, const UpdateCallback& gameLoopCallback);
 
 			void Shutdown();
 

@@ -1,6 +1,7 @@
 add_rules("mode.debug", "mode.release")
 add_requires("glfw")
 add_requires("spdlog")
+add_requires("soloud")
 
 set_policy("build.warning", true) -- show warnings
 set_warnings("all") -- warn about many things
@@ -12,6 +13,7 @@ target("ligmengine")
     -- Adds required packages.
     add_packages("glfw")
     add_packages("spdlog")
+    add_packages("soloud")
 
     -- Declare our engine's header path.
     -- This allows targets that depend on the engine to #include them.
@@ -24,10 +26,12 @@ target("ligmengine")
 target("helloworld")
     set_kind("binary")
     set_languages("cxx17")
+    set_rundir("$(projectdir)")
 
     -- Adds required packages.
     add_packages("glfw")
     add_packages("spdlog")
+    add_packages("soloud")
 
     add_deps("ligmengine")
 
