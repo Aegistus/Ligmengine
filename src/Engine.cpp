@@ -40,6 +40,9 @@ namespace Ligmengine
 			graphics.Draw();
 			callback();
 
+			// late updates
+			input.LateUpdate();
+
 			// Manage timestep
 			double sleepTime = TIME_STEP - (glfwGetTime() - frameStart);
 			std::this_thread::sleep_for(std::chrono::duration<double>(sleepTime));
