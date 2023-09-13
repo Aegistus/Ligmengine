@@ -23,9 +23,14 @@ namespace Ligmengine
 			WGPUQueue gpuQueue;
 
 			WGPUBuffer vertex_buffer;
+			WGPUSwapChain swapchain;
+			WGPUBuffer uniform_buffer;
+			WGPUSampler sampler;
+			WGPUShaderModule shader_module;
 
 			void Startup();
 			void Shutdown();
 			void Draw();
+			void RecreateSwapChain();
 	};
 }

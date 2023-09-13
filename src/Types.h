@@ -10,5 +10,6 @@ namespace Ligmengine
 	typedef glm::vec2 vector2;
 	typedef glm::vec3 vector3;
 	typedef glm::vec4 vector4;
+	typedef glm::mat4 matrix4x4;
 	class Engine;
 }
