@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\demo",
+    "\\shaders",
     "\\src"
   ],
-  "SelectedNode": "\\demo\\helloworld.cpp",
+  "SelectedNode": "\\src\\GraphicsManager.h",
   "PreviewInSolutionExplorer": false
 }

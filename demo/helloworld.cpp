@@ -1,6 +1,9 @@
 #include <iostream>
 #include <Engine.h>
 #include <InputCode.h>
+#include <SpriteLoader.h>
+#include <Sprite.h>
+#include <vector>
 using namespace Ligmengine;
 
 void StartupCallback()
@@ -11,6 +14,9 @@ void StartupCallback()
 
 int main(int argc, const char* argv[]) {
     //std::cout << "Hello, World!\n";
+    Ligmengine::gEngine.spriteLoader.LoadSprite("icon", "sprites/LigmengineIcon.png");
+    std::vector<Sprite> sprites;
+    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["icon"]);
     Ligmengine::gEngine.Startup(StartupCallback, [&]()
         {
             if (gEngine.input.GetKeyDown(InputCode::KEY_A))
@@ -27,6 +33,7 @@ int main(int argc, const char* argv[]) {
             {
                 gEngine.quit = true;
             }
+            gEngine.graphics.Draw(sprites);
         });
 
     return 0;

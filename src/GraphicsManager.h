@@ -4,6 +4,8 @@
 #include <webgpu/webgpu.h>
 #include <glfw3webgpu.h>
 #include <Types.h>
+#include <vector>
+#include <Sprite.h>
 
 namespace Ligmengine
 {
@@ -20,17 +22,20 @@ namespace Ligmengine
 			WGPUSurface surface;
 			WGPUAdapter adapter;
 			WGPUDevice device;
-			WGPUQueue gpuQueue;
+			WGPUQueue queue;
+			WGPURenderPipeline pipeline;
 
 			WGPUBuffer vertex_buffer;
 			WGPUSwapChain swapchain;
+			WGPUTextureFormat swap_chain_format;
 			WGPUBuffer uniform_buffer;
 			WGPUSampler sampler;
 			WGPUShaderModule shader_module;
 
 			void Startup();
 			void Shutdown();
-			void Draw();
+			void Draw(std::vector<Sprite>& sprites);
 			void RecreateSwapChain();
+			void SendTextureToGPU(unsigned char *data, WGPUTexture tex, int width, int height);
 	};
 }

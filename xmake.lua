@@ -4,6 +4,7 @@ add_requires("spdlog")
 add_requires("soloud")
 add_requires("wgpu-native", "glfw3webgpu")
 add_requires("glm")
+add_requires("stb")
 
 set_policy("build.warning", true) -- show warnings
 set_warnings("all") -- warn about many things
@@ -18,6 +19,7 @@ target("ligmengine")
     add_packages("soloud")
     add_packages("wgpu-native", "glfw3webgpu")
     add_packages("glm", { public = true })
+    add_packages("stb")
 
     -- Declare our engine's header path.
     -- This allows targets that depend on the engine to #include them.
