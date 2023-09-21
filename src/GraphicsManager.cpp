@@ -125,7 +125,10 @@ namespace Ligmengine
             .maxAnisotropy = 1
         }));
         string fullShaderPath = gEngine.resourceManager.GetFullAssetPath("shader.wgsl");
-        const char* source = &gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath)[0];
+        string shaderStart = "R\"(";
+        string shaderEnd = ")\"";
+        const char* source = &(shaderStart + gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath) + shaderEnd)[0];
+        std::cout << *source << std::endl;
 
         WGPUShaderModuleWGSLDescriptor code_desc = {};
         code_desc.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor;
@@ -307,7 +310,7 @@ namespace Ligmengine
                 })
             );
             wgpuBindGroupLayoutRelease( layout );
-            wgpuRenderPassEncoderSetBindGroup(render_pass, 1, bind_group, 0, nullptr);
+            wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_group, 0, nullptr);
             wgpuRenderPassEncoderDraw( render_pass, 4, 1, 0, i );
             wgpuBindGroupRelease(bind_group);
         }
