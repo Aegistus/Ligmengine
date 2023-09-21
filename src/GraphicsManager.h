@@ -18,7 +18,7 @@ namespace Ligmengine
 			int window_height = 1080;
 			bool window_fullscreen = false;
 
-			WGPUInstance webGPU;
+			WGPUInstance instance;
 			WGPUSurface surface;
 			WGPUAdapter adapter;
 			WGPUDevice device;

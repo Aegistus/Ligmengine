@@ -6,18 +6,18 @@
 #include <vector>
 using namespace Ligmengine;
 
-void StartupCallback()
+void StartupCallback(std::vector<Sprite>& sprites)
 {
     Ligmengine::gEngine.soundManager.LoadSound("ClickSound", "sounds/ClickSound.wav");
     Ligmengine::gEngine.soundManager.LoadSound("OtherSound", "sounds/OtherSound.wav");
+    Ligmengine::gEngine.spriteLoader.LoadSprite("icon", "sprites/LigmengineIcon.png");
+    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["icon"]);
 }
 
 int main(int argc, const char* argv[]) {
     //std::cout << "Hello, World!\n";
-    Ligmengine::gEngine.spriteLoader.LoadSprite("icon", "sprites/LigmengineIcon.png");
     std::vector<Sprite> sprites;
-    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["icon"]);
-    Ligmengine::gEngine.Startup(StartupCallback, [&]()
+    Ligmengine::gEngine.Startup([&]() {StartupCallback(sprites);}, [&]()
         {
             if (gEngine.input.GetKeyDown(InputCode::KEY_A))
             {

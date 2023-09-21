@@ -11,10 +11,10 @@ namespace Ligmengine
 {
 	void Engine::Startup(const UpdateCallback& startupCallback, const UpdateCallback& callback)
 	{
-		startupCallback();
 		graphics.Startup();
 		input.Startup();
 		soundManager.Startup();
+		startupCallback();
 		RunGameLoop(callback);
 	}
 
@@ -34,7 +34,7 @@ namespace Ligmengine
 				quit = true;
 			}
 			double frameStart = glfwGetTime();
-			//spdlog::info(frameStart);
+			spdlog::info(frameStart);
 			input.Update();
 			// UpdateCallback
 			//graphics.Draw();

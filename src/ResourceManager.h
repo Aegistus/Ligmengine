@@ -11,5 +11,6 @@ namespace Ligmengine
 
 		public:
 			string GetFullAssetPath(string assetPath);
+			string LoadStringFromTextFile(string fullAssetPath);
 	};
 }

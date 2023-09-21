@@ -44,10 +44,9 @@ namespace Ligmengine
 			glfwTerminate();
 		}
 		// WebGPU setup
-		WGPUInstance instance = wgpuCreateInstance(to_ptr(WGPUInstanceDescriptor{}));
-        WGPUSurface surface = glfwGetWGPUSurface(instance, window);
-
-        WGPUAdapter adapter = nullptr;
+		instance = wgpuCreateInstance(to_ptr(WGPUInstanceDescriptor{}));
+        surface = glfwGetWGPUSurface(instance, window);
+        adapter = nullptr;
         wgpuInstanceRequestAdapter(
             instance,
             to_ptr(WGPURequestAdapterOptions{ .compatibleSurface = surface }),
@@ -61,8 +60,7 @@ namespace Ligmengine
             },
             &(adapter)
         );
-
-        WGPUDevice device = nullptr;
+        device = nullptr;
         wgpuAdapterRequestDevice(
             adapter,
             nullptr,
@@ -76,7 +74,6 @@ namespace Ligmengine
             },
             &(device)
         );
-
         // An error callback to help with debugging
         wgpuDeviceSetUncapturedErrorCallback(
             device,
@@ -85,8 +82,7 @@ namespace Ligmengine
             },
             nullptr
         );
-
-        WGPUQueue queue = wgpuDeviceGetQueue(device);
+        queue = wgpuDeviceGetQueue(device);
 
         // A vertex buffer containing a textured square.
         const struct {
@@ -107,17 +103,20 @@ namespace Ligmengine
         }));
         wgpuQueueWriteBuffer(queue, vertex_buffer, 0, vertices, sizeof(vertices));
 
+        uniform_buffer = wgpuDeviceCreateBuffer(device, to_ptr(WGPUBufferDescriptor{
+            .usage = WGPUBufferUsage_CopyDst | WGPUBufferUsage_Uniform,
+            .size = sizeof(Uniforms)
+        }));
+
         RecreateSwapChain();
+
         // code to make it so that the user can dynamically resize the window
         //glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
         //{
         //    RecreateSwapChain();
         //});
 
-        uniform_buffer = wgpuDeviceCreateBuffer(device, to_ptr(WGPUBufferDescriptor{
-            .usage = WGPUBufferUsage_CopyDst | WGPUBufferUsage_Uniform,
-            .size = sizeof(Uniforms)
-        }));
+
         sampler = wgpuDeviceCreateSampler(device, to_ptr(WGPUSamplerDescriptor{
             .addressModeU = WGPUAddressMode_ClampToEdge,
             .addressModeV = WGPUAddressMode_ClampToEdge,
@@ -125,12 +124,16 @@ namespace Ligmengine
             .minFilter = WGPUFilterMode_Linear,
             .maxAnisotropy = 1
         }));
-        const char* source = &gEngine.resourceManager.GetFullAssetPath("shader.wgsl")[0];
+        string fullShaderPath = gEngine.resourceManager.GetFullAssetPath("shader.wgsl");
+        const char* source = &gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath)[0];
+
         WGPUShaderModuleWGSLDescriptor code_desc = {};
         code_desc.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor;
         code_desc.code = source; // The shader source as a `char*`
         WGPUShaderModuleDescriptor shader_desc = {};
         shader_desc.nextInChain = &code_desc.chain;
+        std::cout << "TEST01" << std::endl;
+
         shader_module = wgpuDeviceCreateShaderModule(device, &shader_desc);
 
         // declare rest of pipeline to GPU
@@ -229,6 +232,7 @@ namespace Ligmengine
             }})
         } )
     } ) );
+    std::cout << "TEST02" << std::endl;
     }
 
 	void GraphicsManager::Shutdown()
@@ -275,6 +279,8 @@ namespace Ligmengine
             } else {
                 d.scale = vec2( 1.0, real(sprites.at(i).height) / sprites.at(i).width );
             }
+            d.translation = sprites.at(i).position;
+
             wgpuQueueWriteBuffer( queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData) );
             auto layout = wgpuRenderPipelineGetBindGroupLayout( pipeline, 0 );
                 WGPUBindGroup bind_group = wgpuDeviceCreateBindGroup( device, 
@@ -302,22 +308,33 @@ namespace Ligmengine
             );
             wgpuBindGroupLayoutRelease( layout );
             wgpuRenderPassEncoderSetBindGroup(render_pass, 1, bind_group, 0, nullptr);
+            wgpuRenderPassEncoderDraw( render_pass, 4, 1, 0, i );
+            wgpuBindGroupRelease(bind_group);
         }
+        wgpuRenderPassEncoderEnd( render_pass );
+        WGPUCommandBuffer command = wgpuCommandEncoderFinish( encoder, nullptr );
+        wgpuQueueSubmit( queue, 1, &command );
         wgpuBufferRelease(instance_buffer);
+        wgpuSwapChainPresent( swapchain );
 
-        wgpuQueueSubmit(queue, 0, nullptr);
+        // cleanup
+        wgpuTextureViewRelease(current_texture_view);
+        wgpuCommandEncoderRelease(encoder);
 	}
 
     // called when game window is resized
     void GraphicsManager::RecreateSwapChain()
     {
+
         if (swapchain != nullptr)
         {
             wgpuSwapChainRelease(swapchain);
         }
+
         swap_chain_format = wgpuSurfaceGetPreferredFormat(surface, adapter);
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
+
         swapchain = wgpuDeviceCreateSwapChain(device, surface, to_ptr(WGPUSwapChainDescriptor{
             .usage = WGPUTextureUsage_RenderAttachment,
             .format = swap_chain_format,
