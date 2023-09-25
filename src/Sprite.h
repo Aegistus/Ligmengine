@@ -14,8 +14,8 @@ namespace Ligmengine
 			{
 				if (texture != nullptr)
 				{
-					wgpuTextureDestroy(texture);
-					wgpuTextureRelease(texture);
+					//wgpuTextureDestroy(*texture);
+					//wgpuTextureRelease(*texture);
 				}
 			}
 		};

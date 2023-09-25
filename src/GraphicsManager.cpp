@@ -124,118 +124,150 @@ namespace Ligmengine
             .minFilter = WGPUFilterMode_Linear,
             .maxAnisotropy = 1
         }));
-        string fullShaderPath = gEngine.resourceManager.GetFullAssetPath("shader.wgsl");
-        string shaderStart = "R\"(";
-        string shaderEnd = ")\"";
-        const char* source = &(shaderStart + gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath) + shaderEnd)[0];
-        std::cout << *source << std::endl;
+        // string fullShaderPath = gEngine.resourceManager.GetFullAssetPath("shader.wgsl");
+        // string shaderStart = "R\"(";
+        // string shaderEnd = ")\"";
+        //const char* source = gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath).data();
+        //std::cout << *source << std::endl;
+        const char* source = R"(
+				struct Uniforms {
+					projection: mat4x4f,
+				};
 
+				@group(0) @binding(0) var<uniform> uniforms: Uniforms;
+				@group(0) @binding(1) var texSampler: sampler;
+				@group(0) @binding(2) var texData: texture_2d<f32>;
+
+				struct VertexInput {
+					@location(0) position: vec2f,
+					@location(1) texcoords: vec2f,
+					@location(2) translation: vec3f,
+					@location(3) scale: f32,
+				};
+
+				struct VertexOutput {
+					@builtin(position) position: vec4f,
+					@location(0) texcoords: vec2f,
+				};
+
+				@vertex
+				fn vertex_shader_main( in: VertexInput ) -> VertexOutput {
+					var out: VertexOutput;
+					out.position = uniforms.projection * vec4f( vec3f( in.scale * in.position, 0.0 ) + in.translation, 1.0 );
+					out.texcoords = in.texcoords;
+					return out;
+				}
+
+				@fragment
+				fn fragment_shader_main( in: VertexOutput ) -> @location(0) vec4f {
+					let color = textureSample( texData, texSampler, in.texcoords ).rgba;
+					return color;
+				})";
         WGPUShaderModuleWGSLDescriptor code_desc = {};
         code_desc.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor;
         code_desc.code = source; // The shader source as a `char*`
         WGPUShaderModuleDescriptor shader_desc = {};
         shader_desc.nextInChain = &code_desc.chain;
-        std::cout << "TEST01" << std::endl;
 
         shader_module = wgpuDeviceCreateShaderModule(device, &shader_desc);
 
         // declare rest of pipeline to GPU
         pipeline = wgpuDeviceCreateRenderPipeline( device, to_ptr( WGPURenderPipelineDescriptor{
     
-    // Describe the vertex shader inputs
-    .vertex = {
-        .module = shader_module,
-        .entryPoint = "vertex_shader_main",
-        // Vertex attributes.
-        .bufferCount = 2,
-        .buffers = to_ptr<WGPUVertexBufferLayout>({
-            // We have one buffer with our per-vertex position and UV data. This data never changes.
-            // Note how the type, byte offset, and stride (bytes between elements) exactly matches our `vertex_buffer`.
-            {
-                .arrayStride = 4*sizeof(float),
-                .attributeCount = 2,
-                .attributes = to_ptr<WGPUVertexAttribute>({
-                    // Position x,y are first.
+            // Describe the vertex shader inputs
+            .vertex = {
+                .module = shader_module,
+                .entryPoint = "vertex_shader_main",
+                // Vertex attributes.
+                .bufferCount = 2,
+                .buffers = to_ptr<WGPUVertexBufferLayout>({
+                    // We have one buffer with our per-vertex position and UV data. This data never changes.
+                    // Note how the type, byte offset, and stride (bytes between elements) exactly matches our `vertex_buffer`.
                     {
-                        .format = WGPUVertexFormat_Float32x2,
-                        .offset = 0,
-                        .shaderLocation = 0
+                        .arrayStride = 4*sizeof(float),
+                        .attributeCount = 2,
+                        .attributes = to_ptr<WGPUVertexAttribute>({
+                            // Position x,y are first.
+                            {
+                                .format = WGPUVertexFormat_Float32x2,
+                                .offset = 0,
+                                .shaderLocation = 0
+                            },
+                            // Texture coordinates u,v are second.
+                            {
+                                .format = WGPUVertexFormat_Float32x2,
+                                .offset = 2*sizeof(float),
+                                .shaderLocation = 1
+                            }
+                            })
                     },
-                    // Texture coordinates u,v are second.
+                    // We will use a second buffer with our per-sprite translation and scale. This data will be set in our draw function.
                     {
-                        .format = WGPUVertexFormat_Float32x2,
-                        .offset = 2*sizeof(float),
-                        .shaderLocation = 1
+                        .arrayStride = sizeof(InstanceData),
+                        // This data is per-instance. All four vertices will get the same value. Each instance of drawing the vertices will get a different value.
+                        // The type, byte offset, and stride (bytes between elements) exactly match the array of `InstanceData` structs we will upload in our draw function.
+                        .stepMode = WGPUVertexStepMode_Instance,
+                        .attributeCount = 2,
+                        .attributes = to_ptr<WGPUVertexAttribute>({
+                            // Translation as a 3D vector.
+                            {
+                                .format = WGPUVertexFormat_Float32x3,
+                                .offset = offsetof(InstanceData, translation),
+                                .shaderLocation = 2
+                            },
+                            // Scale as a 2D vector for non-uniform scaling.
+                            {
+                                .format = WGPUVertexFormat_Float32x2,
+                                .offset = offsetof(InstanceData, scale),
+                                .shaderLocation = 3
+                            }
+                            })
                     }
                     })
-            },
-            // We will use a second buffer with our per-sprite translation and scale. This data will be set in our draw function.
-            {
-                .arrayStride = sizeof(InstanceData),
-                // This data is per-instance. All four vertices will get the same value. Each instance of drawing the vertices will get a different value.
-                // The type, byte offset, and stride (bytes between elements) exactly match the array of `InstanceData` structs we will upload in our draw function.
-                .stepMode = WGPUVertexStepMode_Instance,
-                .attributeCount = 2,
-                .attributes = to_ptr<WGPUVertexAttribute>({
-                    // Translation as a 3D vector.
-                    {
-                        .format = WGPUVertexFormat_Float32x3,
-                        .offset = offsetof(InstanceData, translation),
-                        .shaderLocation = 2
-                    },
-                    // Scale as a 2D vector for non-uniform scaling.
-                    {
-                        .format = WGPUVertexFormat_Float32x2,
-                        .offset = offsetof(InstanceData, scale),
-                        .shaderLocation = 3
-                    }
-                    })
-            }
-            })
-        },
+                },
     
-    // Interpret our 4 vertices as a triangle strip
-    .primitive = WGPUPrimitiveState{
-        .topology = WGPUPrimitiveTopology_TriangleStrip,
-        },
+            // Interpret our 4 vertices as a triangle strip
+            .primitive = WGPUPrimitiveState{
+                .topology = WGPUPrimitiveTopology_TriangleStrip,
+                },
     
-    // No multi-sampling (1 sample per pixel, all bits on).
-    .multisample = WGPUMultisampleState{
-        .count = 1,
-        .mask = ~0u
-        },
+            // No multi-sampling (1 sample per pixel, all bits on).
+            .multisample = WGPUMultisampleState{
+                .count = 1,
+                .mask = ~0u
+                },
     
-    // Describe the fragment shader and its output
-    .fragment = to_ptr( WGPUFragmentState{
-        .module = shader_module,
-        .entryPoint = "fragment_shader_main",
+            // Describe the fragment shader and its output
+            .fragment = to_ptr( WGPUFragmentState{
+                .module = shader_module,
+                .entryPoint = "fragment_shader_main",
         
-        // Our fragment shader outputs a single color value per pixel.
-        .targetCount = 1,
-        .targets = to_ptr<WGPUColorTargetState>({
-            {
-                .format = swap_chain_format,
-                // The images we want to draw may have transparency, so let's turn on alpha blending with over compositing (ɑ⋅foreground + (1-ɑ)⋅background).
-                // This will blend with whatever has already been drawn.
-                .blend = to_ptr( WGPUBlendState{
-                    // Over blending for color
-                    .color = {
-                        .operation = WGPUBlendOperation_Add,
-                        .srcFactor = WGPUBlendFactor_SrcAlpha,
-                        .dstFactor = WGPUBlendFactor_OneMinusSrcAlpha
-                        },
-                    // Leave destination alpha alone
-                    .alpha = {
-                        .operation = WGPUBlendOperation_Add,
-                        .srcFactor = WGPUBlendFactor_Zero,
-                        .dstFactor = WGPUBlendFactor_One
-                        }
-                    } ),
-                .writeMask = WGPUColorWriteMask_All
-            }})
-        } )
-    } ) );
-    std::cout << "TEST02" << std::endl;
+                // Our fragment shader outputs a single color value per pixel.
+                .targetCount = 1,
+                .targets = to_ptr<WGPUColorTargetState>({
+                    {
+                        .format = swap_chain_format,
+                        // The images we want to draw may have transparency, so let's turn on alpha blending with over compositing (ɑ⋅foreground + (1-ɑ)⋅background).
+                        // This will blend with whatever has already been drawn.
+                        .blend = to_ptr( WGPUBlendState{
+                            // Over blending for color
+                            .color = {
+                                .operation = WGPUBlendOperation_Add,
+                                .srcFactor = WGPUBlendFactor_SrcAlpha,
+                                .dstFactor = WGPUBlendFactor_OneMinusSrcAlpha
+                                },
+                            // Leave destination alpha alone
+                            .alpha = {
+                                .operation = WGPUBlendOperation_Add,
+                                .srcFactor = WGPUBlendFactor_Zero,
+                                .dstFactor = WGPUBlendFactor_One
+                                }
+                            } ),
+                        .writeMask = WGPUColorWriteMask_All
+                    }})
+                } )
+            }
+        ));
     }
 
 	void GraphicsManager::Shutdown()
@@ -253,6 +285,7 @@ namespace Ligmengine
 
 	void GraphicsManager::Draw(std::vector<Sprite>& sprites)
 	{
+        std::vector<WGPUBindGroup> bind_groups;
         WGPUBuffer instance_buffer = wgpuDeviceCreateBuffer( device,
             to_ptr<WGPUBufferDescriptor>({
                 .usage = WGPUBufferUsage_CopyDst | WGPUBufferUsage_Vertex,
@@ -261,6 +294,7 @@ namespace Ligmengine
         );
         WGPUCommandEncoder encoder = wgpuDeviceCreateCommandEncoder( device, nullptr );
         WGPUTextureView current_texture_view = wgpuSwapChainGetCurrentTextureView( swapchain );
+        // begin render pass by clearing the screen
         WGPURenderPassEncoder render_pass = wgpuCommandEncoderBeginRenderPass( encoder, to_ptr<WGPURenderPassDescriptor>({
             .colorAttachmentCount = 1,
             .colorAttachments = to_ptr<WGPURenderPassColorAttachment>({{
@@ -274,6 +308,8 @@ namespace Ligmengine
         );
         wgpuRenderPassEncoderSetPipeline( render_pass, pipeline );
         wgpuRenderPassEncoderSetVertexBuffer( render_pass, 0, vertex_buffer, 0, 4*4*sizeof(float) );
+        wgpuRenderPassEncoderSetVertexBuffer( render_pass, 1 /* slot */, instance_buffer, 0, sizeof(InstanceData) * sprites.size());
+        // TODO: Sort sprites back to front
         for (int i = 0; i < sprites.size(); i++)
         {
             InstanceData d;
@@ -285,8 +321,10 @@ namespace Ligmengine
             d.translation = sprites.at(i).position;
 
             wgpuQueueWriteBuffer( queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData) );
+
             auto layout = wgpuRenderPipelineGetBindGroupLayout( pipeline, 0 );
-                WGPUBindGroup bind_group = wgpuDeviceCreateBindGroup( device, 
+
+            bind_groups.push_back(wgpuDeviceCreateBindGroup(device,
                 to_ptr( WGPUBindGroupDescriptor
                 {
                     .layout = layout,
@@ -304,15 +342,16 @@ namespace Ligmengine
                         },
                         {
                             .binding = 2,
-                            .textureView = wgpuTextureCreateView( sprites.at(i).texture, nullptr )
+                            .textureView = wgpuTextureCreateView(sprites.at(i).texture, nullptr )
                         }
                     })
                 })
-            );
+            ));
+
             wgpuBindGroupLayoutRelease( layout );
-            wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_group, 0, nullptr);
+            wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_groups[i], 0, nullptr);
             wgpuRenderPassEncoderDraw( render_pass, 4, 1, 0, i );
-            wgpuBindGroupRelease(bind_group);
+            //wgpuBindGroupRelease(bind_group);
         }
         wgpuRenderPassEncoderEnd( render_pass );
         WGPUCommandBuffer command = wgpuCommandEncoderFinish( encoder, nullptr );
@@ -323,6 +362,10 @@ namespace Ligmengine
         // cleanup
         wgpuTextureViewRelease(current_texture_view);
         wgpuCommandEncoderRelease(encoder);
+        for (int i = 0; i < bind_groups.size(); i++)
+        {
+            wgpuBindGroupRelease(bind_groups[i]);
+        }
 	}
 
     // called when game window is resized
@@ -337,38 +380,28 @@ namespace Ligmengine
         swap_chain_format = wgpuSurfaceGetPreferredFormat(surface, adapter);
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);
-
-        swapchain = wgpuDeviceCreateSwapChain(device, surface, to_ptr(WGPUSwapChainDescriptor{
-            .usage = WGPUTextureUsage_RenderAttachment,
-            .format = swap_chain_format,
-            .width = (uint32_t)width,
-            .height = (uint32_t)height,
-        }));
         Uniforms uniforms;
         // Start with an identity matrix.
         uniforms.projection = mat4{1};
         // Scale x and y by 1/100.
         uniforms.projection[0][0] = uniforms.projection[1][1] = 1./100.;
         // Scale the long edge by an additional 1/(long/short) = short/long.
-        if( width < height ) {
+        if( width < height) 
+        {
             uniforms.projection[1][1] *= width;
             uniforms.projection[1][1] /= height;
-        } else {
+        }
+        else 
+        {
             uniforms.projection[0][0] *= height;
             uniforms.projection[0][0] /= width;
         }
+        swapchain = wgpuDeviceCreateSwapChain(device, surface, to_ptr(WGPUSwapChainDescriptor{
+            .usage = WGPUTextureUsage_RenderAttachment,
+            .format = swap_chain_format,
+            .width = (uint32_t)width,
+            .height = (uint32_t)height,
+        }));
         wgpuQueueWriteBuffer( queue, uniform_buffer, 0, &uniforms, sizeof(Uniforms) );
-    }
-
-    void GraphicsManager::SendTextureToGPU(unsigned char *data, WGPUTexture tex, int width, int height)
-    {
-        wgpuQueueWriteTexture(
-            queue,
-            to_ptr<WGPUImageCopyTexture>({ .texture = tex }),
-            data,
-            width * height * 4,
-            to_ptr<WGPUTextureDataLayout>({ .bytesPerRow = (uint32_t)(width*4), .rowsPerImage = (uint32_t)height }),
-            to_ptr<WGPUExtent3D>( { (uint32_t)width, (uint32_t)height, 1 } )
-        );
     }
 }

@@ -36,6 +36,5 @@ namespace Ligmengine
 			void Shutdown();
 			void Draw(std::vector<Sprite>& sprites);
 			void RecreateSwapChain();
-			void SendTextureToGPU(unsigned char *data, WGPUTexture tex, int width, int height);
 	};
 }

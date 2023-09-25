@@ -16,6 +16,10 @@ xmake version 2.8.2+master.8bc2fe44d
       <Configuration>debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="release|x64">
+      <Configuration>release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
 
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -57,8 +61,40 @@ xmake version 2.8.2+master.8bc2fe44d
     <XmakeCXFlags></XmakeCXFlags>
     <XmakeCXXFlags></XmakeCXXFlags>
   </PropertyGroup>
+  <PropertyGroup Label="XmakeConfig" Condition="'$(Configuration)|$(Platform)'=='release|x64'">
+    <XmakeBasename>helloworld</XmakeBasename>
+    <XmakeFilename>helloworld.exe</XmakeFilename>
+    <XmakeMode>release</XmakeMode>
+    <XmakePlat>windows</XmakePlat>
+    <XmakeArch>x64</XmakeArch>
+    <XmakeKind>binary</XmakeKind>
+    <XmakeDefault>true</XmakeDefault>
+    <XmakeDefines>GLFW_INCLUDE_NONE</XmakeDefines>
+    <XmakeLanguages>cxx20</XmakeLanguages>
+    <XmakeSubSystem>console</XmakeSubSystem>
+    <XmakeCudaVersion><!-- nil --></XmakeCudaVersion>
+    <XmakeWindowsSdkVersion><!-- nil --></XmakeWindowsSdkVersion>
+    <XmakeMfcKind><!-- nil --></XmakeMfcKind>
+    <XmakeRunEnvs>PATH=C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw\3.3.8\d12e591897c9472fb7d3725fa5811388\lib;C:\Users\joeba\AppData\Local\.xmake\packages\s\soloud\2020.02.07\512314fd5727407eae3700844140601d\lib;C:\Users\joeba\AppData\Local\.xmake\packages\w\wgpu-native\v0.17.0+2\449bbe26b0ba466ba594e179158e4caa\lib;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw3webgpu\v1.0.1\1c77c5c3103d464ab63a5728bb543411\lib;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw3webgpu\v1.0.1\1c77c5c3103d464ab63a5728bb543411\bin;C:\Users\joeba\AppData\Local\.xmake\packages\w\wgpu-native\v0.17.0+2\449bbe26b0ba466ba594e179158e4caa\bin;C:\Users\joeba\AppData\Local\.xmake\packages\c\cmake\3.26.4\4d23fc87455a4a1c819e093bd8456f0f\bin;C:\Users\joeba\AppData\Local\.xmake\packages\o\opengl\latest\8574311f4b544fa89a3d8c3ee79d1929\bin;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw\3.3.8\d12e591897c9472fb7d3725fa5811388\bin;C:\Users\joeba\AppData\Local\.xmake\packages\g\glm\0.9.9+8\8335bab7c0314ab9921440de58961aac\bin;C:\Users\joeba\AppData\Local\.xmake\packages\s\soloud\2020.02.07\512314fd5727407eae3700844140601d\bin;C:\Users\joeba\AppData\Local\.xmake\packages\m\miniaudio\0.11.17\8b370dd1b8a5478f9497d636212f2138\bin;C:\Users\joeba\AppData\Local\.xmake\packages\s\spdlog\v1.12.0\bc8a841237a14a22acef4ace4e7bf71c\bin;C:\Users\joeba\AppData\Local\.xmake\packages\s\stb\2023.01.30\87edd883faeb4b168400e7458251d335\bin;$([System.Environment]::GetEnvironmentVariable('PATH'))</XmakeRunEnvs>
+    <XmakeRunArgs><!-- nil --></XmakeRunArgs>
+    <XmakeConfigFlags></XmakeConfigFlags>
+    <XmakeIncludeDirs>$(XmakeProjectDir)\src;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw\3.3.8\d12e591897c9472fb7d3725fa5811388\include;C:\Users\joeba\AppData\Local\.xmake\packages\s\spdlog\v1.12.0\bc8a841237a14a22acef4ace4e7bf71c\include;C:\Users\joeba\AppData\Local\.xmake\packages\s\soloud\2020.02.07\512314fd5727407eae3700844140601d\include;C:\Users\joeba\AppData\Local\.xmake\packages\m\miniaudio\0.11.17\8b370dd1b8a5478f9497d636212f2138\include;C:\Users\joeba\AppData\Local\.xmake\packages\w\wgpu-native\v0.17.0+2\449bbe26b0ba466ba594e179158e4caa\include;C:\Users\joeba\AppData\Local\.xmake\packages\w\wgpu-native\v0.17.0+2\449bbe26b0ba466ba594e179158e4caa\include\webgpu;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw3webgpu\v1.0.1\1c77c5c3103d464ab63a5728bb543411\include;C:\Users\joeba\AppData\Local\.xmake\packages\g\glm\0.9.9+8\8335bab7c0314ab9921440de58961aac\include</XmakeIncludeDirs>
+    <XmakeLinkDirs>C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw\3.3.8\d12e591897c9472fb7d3725fa5811388\lib;C:\Users\joeba\AppData\Local\.xmake\packages\s\soloud\2020.02.07\512314fd5727407eae3700844140601d\lib;C:\Users\joeba\AppData\Local\.xmake\packages\w\wgpu-native\v0.17.0+2\449bbe26b0ba466ba594e179158e4caa\lib;C:\Users\joeba\AppData\Local\.xmake\packages\g\glfw3webgpu\v1.0.1\1c77c5c3103d464ab63a5728bb543411\lib;$(XmakeProjectDir)\build\windows\x64\release</XmakeLinkDirs>
+    <XmakeSourceDirs></XmakeSourceDirs>
+    <XmakePrecompiledHeader><!-- nil --></XmakePrecompiledHeader>
+    <XmakeCFlags></XmakeCFlags>
+    <XmakeCXFlags>-DNDEBUG</XmakeCXFlags>
+    <XmakeCXXFlags></XmakeCXXFlags>
+  </PropertyGroup>
 
   <PropertyGroup Label="XmakePath" Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
+    <XmakeBuilDir>$(XmakeProjectDir)\build</XmakeBuilDir>
+    <XmakeConfigDir></XmakeConfigDir>
+    <XmakeConfigFileDir></XmakeConfigFileDir>
+    <XmakeTargetDir></XmakeTargetDir>
+    <XmakeRunDir>$(XmakeProjectDir)\.</XmakeRunDir>
+  </PropertyGroup>
+  <PropertyGroup Label="XmakePath" Condition="'$(Configuration)|$(Platform)'=='release|x64'">
     <XmakeBuilDir>$(XmakeProjectDir)\build</XmakeBuilDir>
     <XmakeConfigDir></XmakeConfigDir>
     <XmakeConfigFileDir></XmakeConfigFileDir>

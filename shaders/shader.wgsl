@@ -1,4 +1,3 @@
-
 struct Uniforms {
     projection: mat4x4f,
 };

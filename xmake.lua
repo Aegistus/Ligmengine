@@ -1,4 +1,5 @@
 add_rules("mode.debug", "mode.release")
+add_rules("plugin.vsxmake.autoupdate")
 add_requires("glfw")
 add_requires("spdlog")
 add_requires("soloud")
