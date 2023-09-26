@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\demo",
-    "\\src"
+    "\\src",
+    "\\vsxmake2019\\helloworld"
   ],
-  "SelectedNode": "\\demo\\helloworld.cpp",
+  "SelectedNode": "\\src\\SpriteLoader.h",
   "PreviewInSolutionExplorer": false
 }

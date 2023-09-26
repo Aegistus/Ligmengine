@@ -7,6 +7,7 @@
 #include <Types.h>
 #include <Engine.h>
 #include <vector>
+#include <algorithm>
 
 using namespace glm;
 
@@ -111,11 +112,10 @@ namespace Ligmengine
         RecreateSwapChain();
 
         // code to make it so that the user can dynamically resize the window
-        //glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
-        //{
-        //    RecreateSwapChain();
-        //});
-
+        glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
+        {
+            gEngine.graphics.RecreateSwapChain();
+        });
 
         sampler = wgpuDeviceCreateSampler(device, to_ptr(WGPUSamplerDescriptor{
             .addressModeU = WGPUAddressMode_ClampToEdge,
@@ -302,7 +302,7 @@ namespace Ligmengine
                 .loadOp = WGPULoadOp_Clear,
                 .storeOp = WGPUStoreOp_Store,
                 // Choose the background color.
-                .clearValue = WGPUColor{ 1.0, 1.0, 1.0, 1.0 }
+                .clearValue = WGPUColor{ 0, 1, 0, 0 }
                 }})
             }) 
         );
@@ -310,6 +310,7 @@ namespace Ligmengine
         wgpuRenderPassEncoderSetVertexBuffer( render_pass, 0, vertex_buffer, 0, 4*4*sizeof(float) );
         wgpuRenderPassEncoderSetVertexBuffer( render_pass, 1 /* slot */, instance_buffer, 0, sizeof(InstanceData) * sprites.size());
         // TODO: Sort sprites back to front
+        std::sort(sprites.begin(), sprites.end(), [](const Sprite& lhs, const Sprite& rhs) { return lhs.position.z > rhs.position.z; });
         for (int i = 0; i < sprites.size(); i++)
         {
             InstanceData d;
@@ -318,6 +319,8 @@ namespace Ligmengine
             } else {
                 d.scale = vec2( 1.0, real(sprites.at(i).height) / sprites.at(i).width );
             }
+            d.scale.x *= 10;
+            d.scale.y *= 10;
             d.translation = sprites.at(i).position;
 
             wgpuQueueWriteBuffer( queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData) );
@@ -351,7 +354,6 @@ namespace Ligmengine
             wgpuBindGroupLayoutRelease( layout );
             wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_groups[i], 0, nullptr);
             wgpuRenderPassEncoderDraw( render_pass, 4, 1, 0, i );
-            //wgpuBindGroupRelease(bind_group);
         }
         wgpuRenderPassEncoderEnd( render_pass );
         WGPUCommandBuffer command = wgpuCommandEncoderFinish( encoder, nullptr );

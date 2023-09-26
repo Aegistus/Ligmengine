@@ -11,7 +11,11 @@ void StartupCallback(std::vector<Sprite>& sprites)
     Ligmengine::gEngine.soundManager.LoadSound("ClickSound", "sounds/ClickSound.wav");
     Ligmengine::gEngine.soundManager.LoadSound("OtherSound", "sounds/OtherSound.wav");
     Ligmengine::gEngine.spriteLoader.LoadSprite("icon", "sprites/LigmengineIcon.png");
+    Ligmengine::gEngine.spriteLoader.LoadSprite("Gavin", "sprites/Gavin Default.png");
+    Ligmengine::gEngine.spriteLoader.LoadSprite("Ollie", "sprites/Ollie Cute.png");
     sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["icon"]);
+    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Gavin"]);
+    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Ollie"]);
 }
 
 int main(int argc, const char* argv[]) {
