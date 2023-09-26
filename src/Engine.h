@@ -8,6 +8,8 @@
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
+using namespace std;
+
 namespace Ligmengine
 {
 	static const float TIME_STEP = ((float) 1 / 60);

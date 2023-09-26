@@ -1,0 +1,8 @@
+
+namespace Ligmengine
+{
+	class Component
+	{
+
+	};
+}
