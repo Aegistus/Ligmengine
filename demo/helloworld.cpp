@@ -2,7 +2,7 @@
 #include <Engine.h>
 #include <InputCode.h>
 #include <SpriteLoader.h>
-#include <Sprite.h>
+#include <Components.h>
 #include <vector>
 using namespace Ligmengine;
 
@@ -14,8 +14,8 @@ void StartupCallback(std::vector<Sprite>& sprites)
     Ligmengine::gEngine.spriteLoader.LoadSprite("Gavin", "sprites/Gavin Default.png");
     Ligmengine::gEngine.spriteLoader.LoadSprite("Ollie", "sprites/Ollie Cute.png");
     sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["icon"]);
-    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Gavin"]);
-    sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Ollie"]);
+    //sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Gavin"]);
+    //sprites.push_back(Ligmengine::gEngine.spriteLoader.sprites["Ollie"]);
 }
 
 int main(int argc, const char* argv[]) {
@@ -37,7 +37,6 @@ int main(int argc, const char* argv[]) {
             {
                 gEngine.quit = true;
             }
-            gEngine.graphics.Draw(sprites);
         });
 
     return 0;

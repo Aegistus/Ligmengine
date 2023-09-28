@@ -5,6 +5,7 @@
 #include <ResourceManager.h>
 #include <SoundManager.h>
 #include <SpriteLoader.h>
+#include <ECS.h>
 #define GLFW_INCLUDE_NONE
 #include "GLFW/glfw3.h"
 
@@ -24,6 +25,7 @@ namespace Ligmengine
 			ResourceManager resourceManager;
 			SoundManager soundManager;
 			SpriteLoader spriteLoader;
+			ECS ecs;
 
 			void Startup(const UpdateCallback& startupCallback, const UpdateCallback& gameLoopCallback);
 

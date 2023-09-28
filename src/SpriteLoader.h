@@ -1,11 +1,10 @@
 #pragma once
 
 #include <ResourceManager.h>
-#pragma once
 #include <unordered_map>
 #include <Types.h>
 #include <webgpu/webgpu.h>
-#include <Sprite.h>
+#include <Components.h>
 
 namespace Ligmengine
 {

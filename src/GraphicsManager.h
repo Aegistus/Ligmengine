@@ -5,7 +5,7 @@
 #include <glfw3webgpu.h>
 #include <Types.h>
 #include <vector>
-#include <Sprite.h>
+#include <Components.h>
 
 namespace Ligmengine
 {
@@ -34,7 +34,7 @@ namespace Ligmengine
 
 			void Startup();
 			void Shutdown();
-			void Draw(std::vector<Sprite>& sprites);
+			void Draw();
 			void RecreateSwapChain();
 	};
 }

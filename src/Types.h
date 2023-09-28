@@ -2,6 +2,7 @@
 
 #include <string>
 #include "glm/glm.hpp"
+#include <typeindex>
 
 namespace Ligmengine
 {
@@ -11,6 +12,8 @@ namespace Ligmengine
 	typedef glm::vec3 vector3;
 	typedef glm::vec4 vector4;
 	typedef glm::mat4 matrix4x4;
+	// ECS
 	typedef long EntityID;
+	typedef std::type_index ComponentIndex;
 	class Engine;
 }

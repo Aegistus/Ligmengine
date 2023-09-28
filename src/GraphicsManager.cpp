@@ -5,6 +5,7 @@
 #include "spdlog/spdlog.h"
 #include "glm/glm.hpp"
 #include <Types.h>
+#include <Components.h>
 #include <Engine.h>
 #include <vector>
 #include <algorithm>
@@ -283,91 +284,91 @@ namespace Ligmengine
 		glfwTerminate();
 	}
 
-	void GraphicsManager::Draw(std::vector<Sprite>& sprites)
+	void GraphicsManager::Draw()
 	{
-        std::vector<WGPUBindGroup> bind_groups;
-        WGPUBuffer instance_buffer = wgpuDeviceCreateBuffer( device,
-            to_ptr<WGPUBufferDescriptor>({
-                .usage = WGPUBufferUsage_CopyDst | WGPUBufferUsage_Vertex,
-                .size = sizeof(InstanceData) * sprites.size()
-            })
-        );
-        WGPUCommandEncoder encoder = wgpuDeviceCreateCommandEncoder( device, nullptr );
-        WGPUTextureView current_texture_view = wgpuSwapChainGetCurrentTextureView( swapchain );
-        // begin render pass by clearing the screen
-        WGPURenderPassEncoder render_pass = wgpuCommandEncoderBeginRenderPass( encoder, to_ptr<WGPURenderPassDescriptor>({
-            .colorAttachmentCount = 1,
-            .colorAttachments = to_ptr<WGPURenderPassColorAttachment>({{
-                .view = current_texture_view,
-                .loadOp = WGPULoadOp_Clear,
-                .storeOp = WGPUStoreOp_Store,
-                // Choose the background color.
-                .clearValue = WGPUColor{ 0, 1, 0, 0 }
-                }})
-            }) 
-        );
-        wgpuRenderPassEncoderSetPipeline( render_pass, pipeline );
-        wgpuRenderPassEncoderSetVertexBuffer( render_pass, 0, vertex_buffer, 0, 4*4*sizeof(float) );
-        wgpuRenderPassEncoderSetVertexBuffer( render_pass, 1 /* slot */, instance_buffer, 0, sizeof(InstanceData) * sprites.size());
-        // TODO: Sort sprites back to front
-        std::sort(sprites.begin(), sprites.end(), [](const Sprite& lhs, const Sprite& rhs) { return lhs.position.z > rhs.position.z; });
-        for (int i = 0; i < sprites.size(); i++)
-        {
-            InstanceData d;
-            if( sprites.at(i).width < sprites.at(i).height) {
-                d.scale = vec2( real(sprites.at(i).width / sprites.at(i).height), 1.0 );
-            } else {
-                d.scale = vec2( 1.0, real(sprites.at(i).height) / sprites.at(i).width );
-            }
-            d.scale.x *= 10;
-            d.scale.y *= 10;
-            d.translation = sprites.at(i).position;
-
-            wgpuQueueWriteBuffer( queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData) );
-
-            auto layout = wgpuRenderPipelineGetBindGroupLayout( pipeline, 0 );
-
-            bind_groups.push_back(wgpuDeviceCreateBindGroup(device,
-                to_ptr( WGPUBindGroupDescriptor
-                {
-                    .layout = layout,
-                    .entryCount = 3,
-                    // The entries `.binding` matches what we wrote in the shader.
-                    .entries = to_ptr<WGPUBindGroupEntry>({
-                        {
-                            .binding = 0,
-                            .buffer = uniform_buffer,
-                            .size = sizeof( Uniforms )
-                        },
-                        {
-                            .binding = 1,
-                            .sampler = sampler,
-                        },
-                        {
-                            .binding = 2,
-                            .textureView = wgpuTextureCreateView(sprites.at(i).texture, nullptr )
-                        }
+        gEngine.ecs.ForEach<Sprite>([&](EntityID e)
+            {
+                Sprite& sprite = gEngine.ecs.GetComponent<Sprite>(e);
+                WGPUBindGroup bind_group;
+                WGPUBuffer instance_buffer = wgpuDeviceCreateBuffer(device,
+                    to_ptr<WGPUBufferDescriptor>({
+                        .usage = WGPUBufferUsage_CopyDst | WGPUBufferUsage_Vertex,
+                        .size = sizeof(InstanceData)
+                        })
+                );
+                WGPUCommandEncoder encoder = wgpuDeviceCreateCommandEncoder(device, nullptr);
+                WGPUTextureView current_texture_view = wgpuSwapChainGetCurrentTextureView(swapchain);
+                // begin render pass by clearing the screen
+                WGPURenderPassEncoder render_pass = wgpuCommandEncoderBeginRenderPass(encoder, to_ptr<WGPURenderPassDescriptor>({
+                    .colorAttachmentCount = 1,
+                    .colorAttachments = to_ptr<WGPURenderPassColorAttachment>({{
+                        .view = current_texture_view,
+                        .loadOp = WGPULoadOp_Clear,
+                        .storeOp = WGPUStoreOp_Store,
+                        // Choose the background color.
+                        .clearValue = WGPUColor{ 0, 1, 0, 0 }
+                        }})
                     })
-                })
-            ));
+                );
+                wgpuRenderPassEncoderSetPipeline(render_pass, pipeline);
+                wgpuRenderPassEncoderSetVertexBuffer(render_pass, 0, vertex_buffer, 0, 4 * 4 * sizeof(float));
+                wgpuRenderPassEncoderSetVertexBuffer(render_pass, 1 /* slot */, instance_buffer, 0, sizeof(InstanceData));
+                //std::sort(sprites.begin(), sprites.end(), [](const Sprite& lhs, const Sprite& rhs) { return lhs.position.z > rhs.position.z; });
+                InstanceData d;
+                if (sprite.width < sprite.height) {
+                    d.scale = vec2(real(sprite.width / sprite.height), 1.0);
+                }
+                else {
+                    d.scale = vec2(1.0, real(sprite.height) / sprite.width);
+                }
+                d.scale.x *= 10;
+                d.scale.y *= 10;
+                d.translation = sprite.position;
 
-            wgpuBindGroupLayoutRelease( layout );
-            wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_groups[i], 0, nullptr);
-            wgpuRenderPassEncoderDraw( render_pass, 4, 1, 0, i );
-        }
-        wgpuRenderPassEncoderEnd( render_pass );
-        WGPUCommandBuffer command = wgpuCommandEncoderFinish( encoder, nullptr );
-        wgpuQueueSubmit( queue, 1, &command );
-        wgpuBufferRelease(instance_buffer);
-        wgpuSwapChainPresent( swapchain );
+                wgpuQueueWriteBuffer(queue, instance_buffer, sizeof(InstanceData), &d, sizeof(InstanceData));
 
-        // cleanup
-        wgpuTextureViewRelease(current_texture_view);
-        wgpuCommandEncoderRelease(encoder);
-        for (int i = 0; i < bind_groups.size(); i++)
-        {
-            wgpuBindGroupRelease(bind_groups[i]);
-        }
+                auto layout = wgpuRenderPipelineGetBindGroupLayout(pipeline, 0);
+
+                bind_group = wgpuDeviceCreateBindGroup(device,
+                    to_ptr(WGPUBindGroupDescriptor
+                        {
+                            .layout = layout,
+                            .entryCount = 3,
+                            // The entries `.binding` matches what we wrote in the shader.
+                            .entries = to_ptr<WGPUBindGroupEntry>({
+                                {
+                                    .binding = 0,
+                                    .buffer = uniform_buffer,
+                                    .size = sizeof(Uniforms)
+                                },
+                                {
+                                    .binding = 1,
+                                    .sampler = sampler,
+                                },
+                                {
+                                    .binding = 2,
+                                    .textureView = wgpuTextureCreateView(sprite.texture, nullptr)
+                                }
+                            })
+                        })
+                );
+                wgpuBindGroupLayoutRelease(layout);
+                wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_group, 0, nullptr);
+                wgpuRenderPassEncoderDraw(render_pass, 4, 1, 0, 0);
+                wgpuRenderPassEncoderEnd(render_pass);
+                WGPUCommandBuffer command = wgpuCommandEncoderFinish(encoder, nullptr);
+                wgpuQueueSubmit(queue, 1, &command);
+                wgpuBufferRelease(instance_buffer);
+                wgpuSwapChainPresent(swapchain);
+
+                // cleanup
+                wgpuTextureViewRelease(current_texture_view);
+                wgpuCommandEncoderRelease(encoder);
+
+                wgpuBindGroupRelease(bind_group);
+            }
+        );
+        
 	}
 
     // called when game window is resized

@@ -37,7 +37,7 @@ namespace Ligmengine
 			spdlog::info(frameStart);
 			input.Update();
 			// UpdateCallback
-			//graphics.Draw();
+			graphics.Draw();
 			callback();
 
 			// late updates
