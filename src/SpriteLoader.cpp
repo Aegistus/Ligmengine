@@ -45,13 +45,22 @@ namespace Ligmengine
 			to_ptr<WGPUExtent3D>({ (uint32_t)width, (uint32_t)height, 1 })
 		);		
 		stbi_image_free( data );
-		sprites[name] = { width, height, tex, vector3(50, 50, 0) };
+		sprites[name] = { width, height, tex };
 		// debug info
 		spdlog::info(name);
 		spdlog::info("width: " + std::to_string(width));
 		spdlog::info("height: " + std::to_string(height));
 		//spdlog::info(tex);
 		return true;
+	}
+
+	Sprite* SpriteLoader::GetSprite(string spriteName)
+	{
+		if (sprites.count(spriteName) > 0)
+		{
+			return &sprites[spriteName];
+		}
+		return nullptr;
 	}
 
 	void SpriteLoader::Shutdown()

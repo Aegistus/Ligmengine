@@ -12,25 +12,25 @@ namespace Ligmengine
 	class GraphicsManager
 	{
 		public:
-			GLFWwindow* window;
+			GLFWwindow* window = { 0 };
 			const char* window_name = "Ligmengine";
 			int window_width = 1920;
 			int window_height = 1080;
 			bool window_fullscreen = false;
 
-			WGPUInstance instance;
-			WGPUSurface surface;
-			WGPUAdapter adapter;
-			WGPUDevice device;
-			WGPUQueue queue;
-			WGPURenderPipeline pipeline;
+			WGPUInstance instance = { 0 };
+			WGPUSurface surface = { 0 };
+			WGPUAdapter adapter = { 0 };
+			WGPUDevice device = { 0 };
+			WGPUQueue queue = { 0 };
+			WGPURenderPipeline pipeline = { 0 };
 
-			WGPUBuffer vertex_buffer;
-			WGPUSwapChain swapchain;
-			WGPUTextureFormat swap_chain_format;
-			WGPUBuffer uniform_buffer;
-			WGPUSampler sampler;
-			WGPUShaderModule shader_module;
+			WGPUBuffer vertex_buffer = { 0 };
+			WGPUSwapChain swapchain = { 0 };
+			WGPUTextureFormat swap_chain_format = { };
+			WGPUBuffer uniform_buffer = { 0 };
+			WGPUSampler sampler = { 0 };
+			WGPUShaderModule shader_module = { 0 };
 
 			void Startup();
 			void Shutdown();

@@ -14,7 +14,7 @@ namespace Ligmengine
 			std::unordered_map<string, Sprite> sprites;
 
 			bool LoadSprite(const string& name, const string& path);
-			//void SetSortOrder(const string& name, float order);
+			Sprite* GetSprite(string spriteName);
 
 			void Shutdown();
 	};

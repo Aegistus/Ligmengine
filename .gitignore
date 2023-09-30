@@ -7,3 +7,4 @@
 # Windows
 Thumbs.db
 .vs/Ligmengine/v16/Browse.VC.opendb
+*.ipch

@@ -3,9 +3,12 @@
 #include <string>
 #include "glm/glm.hpp"
 #include <typeindex>
+#include <webgpu/webgpu.h>
 
 namespace Ligmengine
 {
+	class Engine;
+
 	typedef double real;
 	typedef std::string string;
 	typedef glm::vec2 vector2;
@@ -15,5 +18,10 @@ namespace Ligmengine
 	// ECS
 	typedef long EntityID;
 	typedef std::type_index ComponentIndex;
-	class Engine;
+
+	struct Sprite
+	{
+		int width, height;
+		WGPUTexture texture;
+	};
 }

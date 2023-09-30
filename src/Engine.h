@@ -26,7 +26,7 @@ namespace Ligmengine
 			SoundManager soundManager;
 			SpriteLoader spriteLoader;
 			ECS ecs;
-
+			
 			void Startup(const UpdateCallback& startupCallback, const UpdateCallback& gameLoopCallback);
 
 			void Shutdown();
@@ -36,5 +36,4 @@ namespace Ligmengine
 	};
 	
 	inline Engine gEngine;
-
 }

@@ -35,7 +35,7 @@ namespace Ligmengine
 		}
 	}
 
-	template<typename T> void ECS::AddComponent(EntityID entity, T& component)
+	template<typename T> void ECS::AddComponent(EntityID entity, T component)
 	{
 		GetSparseSet<T>().insert({ entity, component });
 	}
