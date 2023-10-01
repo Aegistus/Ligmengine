@@ -18,4 +18,9 @@ namespace Ligmengine
 		vector3 rotation;
 		vector3 scale;
 	};
+
+	struct Script
+	{
+		string name;
+	};
 }

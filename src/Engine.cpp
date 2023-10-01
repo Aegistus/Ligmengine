@@ -14,6 +14,7 @@ namespace Ligmengine
 		graphics.Startup();
 		input.Startup();
 		soundManager.Startup();
+		scriptManager.Startup();
 		startupCallback();
 		RunGameLoop(callback);
 	}
