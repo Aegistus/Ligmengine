@@ -35,6 +35,6 @@ namespace Ligmengine
 			void Startup();
 			void Shutdown();
 			void Draw();
-			void RecreateSwapChain();
+			void UpdateWindowSize();
 	};
 }

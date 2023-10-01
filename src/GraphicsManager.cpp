@@ -111,12 +111,12 @@ namespace Ligmengine
             .size = sizeof(Uniforms)
         }));
 
-        RecreateSwapChain();
+        UpdateWindowSize();
 
         // code to make it so that the user can dynamically resize the window
         glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
         {
-            gEngine.graphics.RecreateSwapChain();
+            gEngine.graphics.UpdateWindowSize();
         });
 
         sampler = wgpuDeviceCreateSampler(device, to_ptr(WGPUSamplerDescriptor{
@@ -293,7 +293,6 @@ namespace Ligmengine
                 entities.push_back(e);
             }
         );
-        spdlog::info(entities.size());
         if (entities.size() == 0)
         {
             return;
@@ -315,7 +314,7 @@ namespace Ligmengine
                 .loadOp = WGPULoadOp_Clear,
                 .storeOp = WGPUStoreOp_Store,
                 // Choose the background color.
-                .clearValue = WGPUColor{ 0, 1, 0, 0 }
+                .clearValue = WGPUColor{ 0, 0, 0, 0 }
                 }})
             })
         );
@@ -392,7 +391,7 @@ namespace Ligmengine
 	}
 
     // called when game window is resized
-    void GraphicsManager::RecreateSwapChain()
+    void GraphicsManager::UpdateWindowSize()
     {
 
         if (swapchain != nullptr)

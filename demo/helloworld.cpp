@@ -24,9 +24,9 @@ void StartupCallback()
     EntityID objTwo = gEngine.ecs.CreateEntity();
     EntityID objThree = gEngine.ecs.CreateEntity();
 
-    gEngine.ecs.AddComponent<Transform>(objOne, Transform({ 0,0,0 }));
-    gEngine.ecs.AddComponent<Transform>(objTwo, Transform({ 0,0,.5 }));
-    gEngine.ecs.AddComponent<Transform>(objThree, Transform({ 0,0,1 }));
+    gEngine.ecs.AddComponent<Transform>(objOne, Transform({ 100,0,1 }));
+    gEngine.ecs.AddComponent<Transform>(objTwo, Transform({ 0,50,.5 }));
+    gEngine.ecs.AddComponent<Transform>(objThree, Transform({ 0,0,0 }));
 
     SpriteRenderer s1;
     s1.sprite = gEngine.spriteLoader.GetSprite("Icon");
