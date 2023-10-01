@@ -22,6 +22,7 @@ namespace Ligmengine
 		{
 			spdlog::error("Failed to load sprite");
 			spdlog::error(stbi_failure_reason());
+			return false;
 		}
 		// create web gpu texture
 		WGPUTextureDescriptor texDesc = WGPUTextureDescriptor 
@@ -47,9 +48,9 @@ namespace Ligmengine
 		stbi_image_free( data );
 		sprites[name] = { width, height, tex };
 		// debug info
-		spdlog::info(name);
-		spdlog::info("width: " + std::to_string(width));
-		spdlog::info("height: " + std::to_string(height));
+		//spdlog::info(name);
+		//spdlog::info("width: " + std::to_string(width));
+		//spdlog::info("height: " + std::to_string(height));
 		//spdlog::info(tex);
 		return true;
 	}

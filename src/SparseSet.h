@@ -15,7 +15,7 @@ namespace Ligmengine
     template< typename T > class SparseSet : public SparseSetHolder
     {
         public:
-            std::unordered_map< EntityID, T > data;
+            std::unordered_map< EntityID, T > data = { };
             bool Has(EntityID e) const override { return data.count(e) > 0; };
             void Drop(EntityID e) override { data.erase(e); };
     };

@@ -8,6 +8,7 @@
 #include <Components.h>
 
 using namespace Ligmengine;
+using namespace std;
 
 void StartupCallback()
 {
@@ -16,16 +17,16 @@ void StartupCallback()
     gEngine.soundManager.LoadSound("OtherSound", "sounds/OtherSound.wav");
     // load sprites
     gEngine.spriteLoader.LoadSprite("Icon", "sprites/LigmengineIcon.png");
-    gEngine.spriteLoader.LoadSprite("Gavin", "sprites/Gavin Default.png");
-    gEngine.spriteLoader.LoadSprite("Ollie", "sprites/Ollie Cute.png");
+    gEngine.spriteLoader.LoadSprite("Gavin", "sprites/GavinDefault.png");
+    gEngine.spriteLoader.LoadSprite("Ollie", "sprites/OllieCute.png");
 
     EntityID objOne = gEngine.ecs.CreateEntity();
     EntityID objTwo = gEngine.ecs.CreateEntity();
     EntityID objThree = gEngine.ecs.CreateEntity();
 
     gEngine.ecs.AddComponent<Transform>(objOne, Transform({ 0,0,0 }));
-    gEngine.ecs.AddComponent<Transform>(objTwo, Transform({ 0,0,0 }));
-    gEngine.ecs.AddComponent<Transform>(objThree, Transform({ 0,0,0 }));
+    gEngine.ecs.AddComponent<Transform>(objTwo, Transform({ 0,0,.5 }));
+    gEngine.ecs.AddComponent<Transform>(objThree, Transform({ 0,0,1 }));
 
     SpriteRenderer s1;
     s1.sprite = gEngine.spriteLoader.GetSprite("Icon");
@@ -36,6 +37,14 @@ void StartupCallback()
     gEngine.ecs.AddComponent<SpriteRenderer>(objOne, s1);
     gEngine.ecs.AddComponent<SpriteRenderer>(objTwo, s2);
     gEngine.ecs.AddComponent<SpriteRenderer>(objThree, s3);
+    if (gEngine.ecs.HasComponent<Transform>(objOne))
+    {
+        cout << "TRUE \n";
+    }
+    else
+    {
+        cout << "FALSE \n";
+    }
 }
 
 int main(int argc, const char* argv[]) {

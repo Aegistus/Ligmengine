@@ -35,22 +35,39 @@ namespace Ligmengine
 			EntityID CreateEntity();
 			void DestroyEntity(EntityID entity);
 
-			template<typename T> T& GetComponent(EntityID entity)
+			/// <summary>
+			/// Checks to see if the entity has a component of type T attached. Will not add a component
+			/// if it doesn't have it.
+			/// </summary>
+			/// <typeparam name="T"></typeparam>
+			/// <param name="entity"></param>
+			/// <returns></returns>
+			template<typename T> bool HasComponent(EntityID entity)
 			{
 				unordered_map<EntityID, T> components = GetSparseSet<T>();
-				if (components.count(entity) != 0)
+				if (components.count(entity) > 0)
 				{
-					return GetSparseSet<T>()[entity];
+					return true;
 				}
-				else
-				{
-					return nullptr;
-				}
+				return false;
+			}
+
+			/// <summary>
+			/// Retrieves the component attached to an entity. If the entity does not have a component
+			/// of type T attached, one will be created. Use HasComponent() to check if an entity has a
+			/// component if adding a component is unwanted.
+			/// </summary>
+			/// <typeparam name="T">The type of component.</typeparam>
+			/// <param name="entity">The entity to get the component from.</param>
+			/// <returns>The component found on (or added to) the entity.</returns>
+			template<typename T> T& GetComponent(EntityID entity)
+			{
+				return GetSparseSet<T>()[entity];
 			}
 
 			template<typename T> void AddComponent(EntityID entity, T component)
 			{
-				GetSparseSet<T>().insert({ entity, component });
+				GetSparseSet<T>()[entity] = component;
 			}
 
 			// Remove component from entity

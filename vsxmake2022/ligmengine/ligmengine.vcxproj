@@ -60,7 +60,7 @@ xmake version 2.8.2+dev.8bc2fe44d
 
   <PropertyGroup Label="XmakePath" Condition="'$(Configuration)|$(Platform)'=='debug|x64'">
     <XmakeBuilDir>$(XmakeProjectDir)\build</XmakeBuilDir>
-    <XmakeConfigDir></XmakeConfigDir>
+    <XmakeConfigDir>c:\users\joeba\onedrive\documents\game dev-death-star-2\ligmengine</XmakeConfigDir>
     <XmakeConfigFileDir></XmakeConfigFileDir>
     <XmakeTargetDir></XmakeTargetDir>
     <XmakeRunDir></XmakeRunDir>

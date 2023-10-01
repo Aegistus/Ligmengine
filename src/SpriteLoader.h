@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <Types.h>
 #include <Components.h>
+#include <webgpu/webgpu.h>
 
 namespace Ligmengine
 {
