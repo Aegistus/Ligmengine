@@ -3,6 +3,7 @@
 #include <InputCode.h>
 #include <SpriteLoader.h>
 #include <vector>
+#include <ECS.h>
 #include <Types.h>
 #include <Components.h>
 

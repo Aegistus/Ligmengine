@@ -3,7 +3,6 @@
 #include <ResourceManager.h>
 #include <unordered_map>
 #include <Types.h>
-#include <webgpu/webgpu.h>
 #include <Components.h>
 
 namespace Ligmengine
