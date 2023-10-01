@@ -293,6 +293,11 @@ namespace Ligmengine
                 entities.push_back(e);
             }
         );
+        spdlog::info(entities.size());
+        if (entities.size() == 0)
+        {
+            return;
+        }
         std::vector<WGPUBindGroup> bind_groups;
         WGPUBuffer instance_buffer = wgpuDeviceCreateBuffer(device,
             to_ptr<WGPUBufferDescriptor>({

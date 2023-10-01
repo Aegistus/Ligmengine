@@ -18,7 +18,7 @@ namespace Ligmengine
 			EntityID nextID = 0;
 			unordered_map<ComponentIndex, std::unique_ptr<SparseSetHolder>> components;
 
-			template<typename T> std::unordered_map<EntityID, T> GetSparseSet()
+			template<typename T> std::unordered_map<EntityID, T>& GetSparseSet()
 			{
 				// Get the index for T's SparseSet
 				const ComponentIndex index = std::type_index(typeid(T));

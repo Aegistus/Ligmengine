@@ -37,14 +37,6 @@ void StartupCallback()
     gEngine.ecs.AddComponent<SpriteRenderer>(objOne, s1);
     gEngine.ecs.AddComponent<SpriteRenderer>(objTwo, s2);
     gEngine.ecs.AddComponent<SpriteRenderer>(objThree, s3);
-    if (gEngine.ecs.HasComponent<Transform>(objOne))
-    {
-        cout << "TRUE \n";
-    }
-    else
-    {
-        cout << "FALSE \n";
-    }
 }
 
 int main(int argc, const char* argv[]) {

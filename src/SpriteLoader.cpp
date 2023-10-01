@@ -34,7 +34,6 @@ namespace Ligmengine
 			.mipLevelCount = 1,
 			.sampleCount = 1
 		};
-		spdlog::info(height);
 		WGPUTexture tex = wgpuDeviceCreateTexture(gEngine.graphics.device, to_ptr(texDesc));
 		// send texture to gpu
 		wgpuQueueWriteTexture(
