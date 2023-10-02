@@ -9,13 +9,12 @@
 #define CAT(x, y) CAT_(x, y)
 #define CAT_(x, y) x ## y
 
-#define COMPONENTTEMPLATE(name, type) {\
+#define COMPONENT_TEMPLATE(name, type) {\
 	lua.set_function(CAT("Has",name), [&](EntityID e){return gEngine.ecs.HasComponent<type>(e);});\
 	lua.set_function(CAT("Get",name), [&](EntityID e)->type& {return gEngine.ecs.GetComponent<type>(e);});\
 	lua.set_function(CAT("Add",name), [&](EntityID e) { gEngine.ecs.AddComponent<type>(e);});\
 	lua.set_function(CAT("Remove",name), [&](EntityID e) {gEngine.ecs.RemoveComponent<type>(e);});\
 }
-
 
 using namespace sol;
 
@@ -86,9 +85,9 @@ namespace Ligmengine
 			);
 		// COMPONENT FUNCTIONS
 		// transform
-		COMPONENTTEMPLATE("Transform", Transform);
-		COMPONENTTEMPLATE("SpriteRenderer", SpriteRenderer);
-		COMPONENTTEMPLATE("Script", Script);
+		COMPONENT_TEMPLATE("Transform", Transform);
+		COMPONENT_TEMPLATE("SpriteRenderer", SpriteRenderer);
+		COMPONENT_TEMPLATE("Script", Script);
 		
 		// application functions
 		lua.set_function("Quit", [&]() { gEngine.quit = true; });

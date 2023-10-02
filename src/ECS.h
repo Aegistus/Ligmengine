@@ -18,7 +18,7 @@ namespace Ligmengine
 			EntityID nextID = 0;
 			unordered_map<ComponentIndex, std::unique_ptr<SparseSetHolder>> components;
 
-			template<typename T> std::unordered_map<EntityID, T>& GetSparseSet()
+			template<typename T> SparseSet<T>& GetSparseSet()
 			{
 				// Get the index for T's SparseSet
 				const ComponentIndex index = std::type_index(typeid(T));
@@ -28,7 +28,7 @@ namespace Ligmengine
 					components[index] = std::make_unique<SparseSet<T>>();
 				}
 				// It's safe to cast the SparseSetHolder to its subclass and return the std::unordered_map< EntityID, T > inside.
-				return static_cast<SparseSet<T>&>(*components[index]).data;
+				return static_cast<SparseSet<T>&>(*components[index]);
 			}
 
 		public:
@@ -44,8 +44,8 @@ namespace Ligmengine
 			/// <returns></returns>
 			template<typename T> bool HasComponent(EntityID entity)
 			{
-				unordered_map<EntityID, T> components = GetSparseSet<T>();
-				if (components.count(entity) > 0)
+				SparseSet<T> components = GetSparseSet<T>();
+				if (components.data.count(entity) > 0)
 				{
 					return true;
 				}
@@ -62,12 +62,12 @@ namespace Ligmengine
 			/// <returns>The component found on (or added to) the entity.</returns>
 			template<typename T> T& GetComponent(EntityID entity)
 			{
-				return GetSparseSet<T>()[entity];
+				return GetSparseSet<T>().data[entity];
 			}
 
-			template<typename T> void AddComponent(EntityID entity, T component)
+			template<typename T> void AddComponent(EntityID entity)
 			{
-				GetSparseSet<T>()[entity] = component;
+				GetSparseSet<T>().data[entity] = T {};
 			}
 
 			// Remove component from entity
@@ -78,8 +78,8 @@ namespace Ligmengine
 
 			template<typename T> void ForEach(ComponentCallback callback)
 			{
-				unordered_map<EntityID, T> componentSet = GetSparseSet<T>();
-				for (const auto& [entity, component] : componentSet)
+				SparseSet<T> componentSet = GetSparseSet<T>();
+				for (const auto& [entity, component] : componentSet.data)
 				{
 					callback(entity);
 				}
@@ -87,12 +87,12 @@ namespace Ligmengine
 
 			template<typename T, typename U> void ForEach(ComponentCallback callback)
 			{
-				unordered_map<EntityID, T> componentSetT = GetSparseSet<T>();
-				unordered_map<EntityID, U> componentSetU = GetSparseSet<U>();
-				for (const auto& [entity, component] : componentSetT)
+				SparseSet<T> componentSetT = GetSparseSet<T>();
+				SparseSet<U> componentSetU = GetSparseSet<U>();
+				for (const auto& [entity, component] : componentSetT.data)
 				{
 					// if the entity has the second component as well.
-					if (componentSetU.count(entity) != 0)
+					if (componentSetU.data.count(entity) != 0)
 					{
 						callback(entity);
 					}
@@ -101,10 +101,10 @@ namespace Ligmengine
 
 			template<typename T, typename U, typename V> void ForEach(ComponentCallback callback)
 			{
-				unordered_map<EntityID, T> componentSetT = GetSparseSet<T>();
-				unordered_map<EntityID, U> componentSetU = GetSparseSet<U>();
-				unordered_map<EntityID, V> componentSetV = GetSparseSet<V>();
-				for (const auto& [entity, component] : componentSetT)
+				SparseSet<T> componentSetT = GetSparseSet<T>();
+				SparseSet<U> componentSetU = GetSparseSet<U>();
+				SparseSet<V> componentSetV = GetSparseSet<V>();
+				for (const auto& [entity, component] : componentSetT.data)
 				{
 					// if the entity has the second and third component as well.
 					if (componentSetU.count(entity) != 0 && componentSetV.count(entity))
