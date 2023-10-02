@@ -37,10 +37,9 @@ namespace Ligmengine
 			double frameStart = glfwGetTime();
 			spdlog::info(frameStart);
 			input.Update();
-			// UpdateCallback
+			scriptManager.Update();
 			graphics.Draw();
 			callback();
-
 			// late updates
 			input.LateUpdate();
 

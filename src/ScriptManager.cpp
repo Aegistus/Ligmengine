@@ -5,15 +5,19 @@
 #include <Components.h>
 #include "spdlog/spdlog.h"
 #include <Types.h>
+#include <map.h>
+#include <InputCode.h>
+#include <functional>
 
 #define CAT(x, y) CAT_(x, y)
 #define CAT_(x, y) x ## y
-
-#define COMPONENT_TEMPLATE(name, type) {\
-	lua.set_function(CAT("Has",name), [&](EntityID e){return gEngine.ecs.HasComponent<type>(e);});\
-	lua.set_function(CAT("Get",name), [&](EntityID e)->type& {return gEngine.ecs.GetComponent<type>(e);});\
-	lua.set_function(CAT("Add",name), [&](EntityID e) { gEngine.ecs.AddComponent<type>(e);});\
-	lua.set_function(CAT("Remove",name), [&](EntityID e) {gEngine.ecs.RemoveComponent<type>(e);});\
+#define STR(x) #x
+#define COMPONENT_TEMPLATE(type) {\
+	lua.set_function(CAT("Has",STR(type)), [&](EntityID e){return gEngine.ecs.HasComponent<type>(e);});\
+	lua.set_function(CAT("Get",STR(type)), [&](EntityID e)->type& {return gEngine.ecs.GetComponent<type>(e);});\
+	lua.set_function(CAT("Add",STR(type)), [&](EntityID e) { gEngine.ecs.AddComponent<type>(e);});\
+	lua.set_function(CAT("Remove",STR(type)), [&](EntityID e) {gEngine.ecs.RemoveComponent<type>(e);});\
+	lua.set_function(CAT("ForEach", STR(type)), [&](ComponentCallback callback) {gEngine.ecs.ForEach<type>(callback);});\
 }
 
 using namespace sol;
@@ -52,11 +56,10 @@ namespace Ligmengine
 				[](float f, const vector2& v1) -> vector2 { return f * v1; }
 			)
 		);
-
 		// input manager functions
-		lua.set_function("GetKeyDown", [&](const InputCode inputCode) { return gEngine.input.GetKeyDown(inputCode); });
-		lua.set_function("GetKeyUp", [&](const InputCode inputCode) { return gEngine.input.GetKeyUp(inputCode);  });
-		lua.set_function("GetKey", [&](const InputCode inputCode) { return gEngine.input.GetKey(inputCode); });
+		lua.set_function("GetKeyDown", [&](const int inputCode) { return gEngine.input.GetKeyDown(static_cast<InputCode>(inputCode)); });
+		lua.set_function("GetKeyUp", [&](const int inputCode) { return gEngine.input.GetKeyUp(static_cast<InputCode>(inputCode));  });
+		lua.set_function("GetKey", [&](const int inputCode) { return gEngine.input.GetKey(static_cast<InputCode>(inputCode)); });
 		// sound manager functions
 		lua.set_function("PlaySound", [&](const string& name) { return gEngine.soundManager.PlaySound(name); });
 		// ecs functions
@@ -84,10 +87,9 @@ namespace Ligmengine
 				"name", &Script::name
 			);
 		// COMPONENT FUNCTIONS
-		// transform
-		COMPONENT_TEMPLATE("Transform", Transform);
-		COMPONENT_TEMPLATE("SpriteRenderer", SpriteRenderer);
-		COMPONENT_TEMPLATE("Script", Script);
+		COMPONENT_TEMPLATE(Transform);
+		COMPONENT_TEMPLATE(SpriteRenderer);
+		COMPONENT_TEMPLATE(Script);
 		
 		// application functions
 		lua.set_function("Quit", [&]() { gEngine.quit = true; });

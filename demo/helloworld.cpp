@@ -37,22 +37,25 @@ void StartupCallback()
     gEngine.ecs.GetComponent<SpriteRenderer>(objOne).sprite = gEngine.spriteLoader.GetSprite("Icon");
     gEngine.ecs.GetComponent<SpriteRenderer>(objTwo).sprite = gEngine.spriteLoader.GetSprite("Gavin");
     gEngine.ecs.GetComponent<SpriteRenderer>(objThree).sprite = gEngine.spriteLoader.GetSprite("Ollie");
+
+    gEngine.scriptManager.LoadScript("Player", "scripts/player.lua");
+    gEngine.ecs.GetComponent<Script>(objTwo).name = "Player";
 }
 
 int main(int argc, const char* argv[]) {
     //std::cout << "Hello, World!\n";
     gEngine.Startup([&]() {StartupCallback();}, [&]()
         {
-            if (gEngine.input.GetKeyDown(InputCode::KEY_A))
-            {
-                std::cout << "TEST\n";
-                gEngine.soundManager.PlaySound("ClickSound");
-            }
-            if (gEngine.input.GetKeyUp(InputCode::KEY_A))
-            {
-                std::cout << "TEST 02 \n";
-                gEngine.soundManager.PlaySound("OtherSound");
-            }
+            //if (gEngine.input.GetKeyDown(InputCode::KEY_A))
+            //{
+            //    std::cout << "TEST\n";
+            //    gEngine.soundManager.PlaySound("ClickSound");
+            //}
+            //if (gEngine.input.GetKeyUp(InputCode::KEY_A))
+            //{
+            //    std::cout << "TEST 02 \n";
+            //    gEngine.soundManager.PlaySound("OtherSound");
+            //}
             if (gEngine.input.GetKey(InputCode::KEY_ESCAPE))
             {
                 gEngine.quit = true;
