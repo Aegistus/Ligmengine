@@ -23,4 +23,9 @@ namespace Ligmengine
 	{
 		string name;
 	};
+
+	struct EntityData
+	{
+		string name;
+	};
 }

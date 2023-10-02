@@ -21,6 +21,7 @@ namespace Ligmengine
 
 	struct Sprite
 	{
+		string name;
 		int width, height;
 		WGPUTexture texture;
 	};

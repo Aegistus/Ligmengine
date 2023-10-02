@@ -24,6 +24,10 @@ void StartupCallback()
     EntityID objTwo = gEngine.ecs.CreateEntity();
     EntityID objThree = gEngine.ecs.CreateEntity();
 
+    gEngine.ecs.GetComponent<EntityData>(objOne).name = "Logo";
+    gEngine.ecs.GetComponent<EntityData>(objTwo).name = "Player";
+    gEngine.ecs.GetComponent<EntityData>(objThree).name = "Ollie";
+
     gEngine.ecs.GetComponent<Transform>(objOne).position = { 100,0,1 };
     gEngine.ecs.GetComponent<Transform>(objTwo).position = { 50,0,.5 };
     gEngine.ecs.GetComponent<Transform>(objThree).position = { 0,0,0 };

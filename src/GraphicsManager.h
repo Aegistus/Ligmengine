@@ -6,6 +6,7 @@
 #include <Types.h>
 #include <vector>
 #include <Components.h>
+#include <GUIManager.h>
 
 namespace Ligmengine
 {
@@ -31,6 +32,8 @@ namespace Ligmengine
 			WGPUBuffer uniform_buffer = { 0 };
 			WGPUSampler sampler = { 0 };
 			WGPUShaderModule shader_module = { 0 };
+
+			GUIManager guiManager;
 
 			void Startup();
 			void Shutdown();

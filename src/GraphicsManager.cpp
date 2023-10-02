@@ -270,6 +270,9 @@ namespace Ligmengine
                 } )
             }
         ));
+
+        // startup gui
+        guiManager.Startup();
     }
 
 	void GraphicsManager::Shutdown()
@@ -283,6 +286,8 @@ namespace Ligmengine
         wgpuDeviceRelease(device);
         wgpuAdapterRelease(adapter);
 		glfwTerminate();
+        // shutdown gui
+        guiManager.Shutdown();
 	}
 
 	void GraphicsManager::Draw()
@@ -374,6 +379,9 @@ namespace Ligmengine
             wgpuRenderPassEncoderSetBindGroup(render_pass, 0, bind_groups[i], 0, nullptr);
             wgpuRenderPassEncoderDraw(render_pass, 4, 1, 0, i);
         }
+        // draw gui stuff
+        guiManager.Draw(render_pass);
+
         wgpuRenderPassEncoderEnd(render_pass);
         WGPUCommandBuffer command = wgpuCommandEncoderFinish(encoder, nullptr);
         wgpuQueueSubmit(queue, 1, &command);
@@ -387,7 +395,6 @@ namespace Ligmengine
         {
             wgpuBindGroupRelease(bind_groups[i]);
         }
-        
 	}
 
     // called when game window is resized
