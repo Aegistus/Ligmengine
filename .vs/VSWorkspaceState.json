@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\assets",
+    "\\assets\\scripts",
     "\\demo",
     "\\src"
   ],
-  "SelectedNode": "\\src\\map.h",
+  "SelectedNode": "\\src\\GraphicsManager.cpp",
   "PreviewInSolutionExplorer": false
 }
