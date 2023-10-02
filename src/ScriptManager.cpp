@@ -6,6 +6,17 @@
 #include "spdlog/spdlog.h"
 #include <Types.h>
 
+#define CAT(x, y) CAT_(x, y)
+#define CAT_(x, y) x ## y
+
+#define COMPONENTTEMPLATE(name, type) {\
+	lua.set_function(CAT("Has",name), [&](EntityID e){return gEngine.ecs.HasComponent<type>(e);});\
+	lua.set_function(CAT("Get",name), [&](EntityID e)->type& {return gEngine.ecs.GetComponent<type>(e);});\
+	lua.set_function(CAT("Add",name), [&](EntityID e) { gEngine.ecs.AddComponent<type>(e);});\
+	lua.set_function(CAT("Remove",name), [&](EntityID e) {gEngine.ecs.RemoveComponent<type>(e);});\
+}
+
+
 using namespace sol;
 
 namespace Ligmengine
@@ -75,21 +86,10 @@ namespace Ligmengine
 			);
 		// COMPONENT FUNCTIONS
 		// transform
-		lua.set_function("HasTransform", [&](EntityID e){return gEngine.ecs.HasComponent<Transform>(e); });
-		lua.set_function("GetTransform", [&](EntityID e)->Transform&{return gEngine.ecs.GetComponent<Transform>(e); });
-		lua.set_function("AddTransform", [&](EntityID e){ gEngine.ecs.AddComponent<Transform>(e); });
-		lua.set_function("RemoveTransform", [&](EntityID e){gEngine.ecs.RemoveComponent<Transform>(e); });
-		// sprite renderer
-		lua.set_function("HasSpriteRenderer", [&](EntityID e){return gEngine.ecs.HasComponent<SpriteRenderer>(e); });
-		lua.set_function("GetSpriteRenderer", [&](EntityID e)->SpriteRenderer& {return gEngine.ecs.GetComponent<SpriteRenderer>(e); });
-		lua.set_function("AddSpriteRenderer", [&](EntityID e){return gEngine.ecs.AddComponent<SpriteRenderer>(e); });
-		lua.set_function("RemoveSpriteRenderer", [&](EntityID e){return gEngine.ecs.RemoveComponent<SpriteRenderer>(e); });
-		// script
-		lua.set_function("HasScript", [&](EntityID e){return gEngine.ecs.HasComponent<Script>(e); });
-		lua.set_function("GetScript", [&](EntityID e)->Script& {return gEngine.ecs.GetComponent<Script>(e); });
-		lua.set_function("AddScript", [&](EntityID e){return gEngine.ecs.AddComponent<Script>(e); });
-		lua.set_function("RemoveScript", [&](EntityID e){return gEngine.ecs.RemoveComponent<Script>(e); });
-
+		COMPONENTTEMPLATE("Transform", Transform);
+		COMPONENTTEMPLATE("SpriteRenderer", SpriteRenderer);
+		COMPONENTTEMPLATE("Script", Script);
+		
 		// application functions
 		lua.set_function("Quit", [&]() { gEngine.quit = true; });
 	}
