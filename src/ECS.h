@@ -33,6 +33,7 @@ namespace Ligmengine
 
 		public:
 			EntityID CreateEntity();
+			EntityID CreateEntity(string name);
 			void DestroyEntity(EntityID entity);
 
 			/// <summary>

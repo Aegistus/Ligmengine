@@ -20,24 +20,14 @@ void StartupCallback()
     gEngine.spriteLoader.LoadSprite("Gavin", "sprites/GavinDefault.png");
     gEngine.spriteLoader.LoadSprite("Ollie", "sprites/OllieCute.png");
 
-    EntityID objOne = gEngine.ecs.CreateEntity();
-    EntityID objTwo = gEngine.ecs.CreateEntity();
-    EntityID objThree = gEngine.ecs.CreateEntity();
-
-    gEngine.ecs.GetComponent<EntityData>(objOne).name = "Logo";
-    gEngine.ecs.GetComponent<EntityData>(objTwo).name = "Player";
-    gEngine.ecs.GetComponent<EntityData>(objThree).name = "Ollie";
+    EntityID objOne = gEngine.ecs.CreateEntity("Logo");
+    EntityID objTwo = gEngine.ecs.CreateEntity("Player");
+    EntityID objThree = gEngine.ecs.CreateEntity("Ollie");
 
     gEngine.ecs.GetComponent<Transform>(objOne).position = { 100,0,1 };
     gEngine.ecs.GetComponent<Transform>(objTwo).position = { 50,0,.5 };
     gEngine.ecs.GetComponent<Transform>(objThree).position = { 0,0,0 };
 
-    SpriteRenderer s1;
-    s1.sprite = gEngine.spriteLoader.GetSprite("Icon");
-    SpriteRenderer s2;
-    s2.sprite = gEngine.spriteLoader.GetSprite("Gavin");
-    SpriteRenderer s3;
-    s3.sprite = gEngine.spriteLoader.GetSprite("Ollie");
     gEngine.ecs.GetComponent<SpriteRenderer>(objOne).sprite = gEngine.spriteLoader.GetSprite("Icon");
     gEngine.ecs.GetComponent<SpriteRenderer>(objTwo).sprite = gEngine.spriteLoader.GetSprite("Gavin");
     gEngine.ecs.GetComponent<SpriteRenderer>(objThree).sprite = gEngine.spriteLoader.GetSprite("Ollie");
