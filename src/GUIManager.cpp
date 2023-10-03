@@ -110,6 +110,14 @@ namespace Ligmengine
 				ImGui::Text("Sprite: %s", s.sprite->name);
 			}
 		}
+		if (gEngine.ecs.HasComponent<Script>(e))
+		{
+			if (ImGui::CollapsingHeader("Script"))
+			{
+				Script s = gEngine.ecs.GetComponent<Script>(e);
+				ImGui::Text("Name: %s", s.name);
+			}
+		}
 		ImGui::EndChild();
 
 		ImGui::End();

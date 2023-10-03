@@ -23,4 +23,3 @@ end
 if GetKey(68) then
 	transform.position.x = transform.position.x + moveSpeed
 end
-
