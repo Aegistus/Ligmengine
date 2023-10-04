@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <Types.h>
+#include "spdlog/spdlog.h"
 
 using std::ifstream; using std::ostringstream;
 
@@ -17,6 +18,8 @@ namespace Ligmengine
 	string ResourceManager::LoadStringFromTextFile(string fullAssetPath)
 	{
 		ifstream input_file(fullAssetPath);
-		return string((std::istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
+		string str = string((std::istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
+		spdlog::info(str);
+		return str;
 	}
 }

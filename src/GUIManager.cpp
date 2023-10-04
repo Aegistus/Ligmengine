@@ -96,8 +96,8 @@ namespace Ligmengine
 			{
 				Transform& t = gEngine.ecs.GetComponent<Transform>(e);
 				ImGui::Text("Position: %.2f %.2f %.2f", t.position.x, t.position.y, t.position.z);
-				ImGui::Text("Rotation: %.2f %.2f %.2f", t.rotation.x, t.rotation.y, t.rotation.z);
-				ImGui::Text("Scale: %.2f %.2f %.2f", t.scale.x, t.scale.y, t.scale.z);
+				ImGui::Text("Rotation: %.2f %.2f", t.rotation.x, t.rotation.y);
+				ImGui::Text("Scale: %.2f %.2f", t.scale.x, t.scale.y);
 			}
 		}
 		if (gEngine.ecs.HasComponent<SpriteRenderer>(e))

@@ -25,6 +25,7 @@ namespace Ligmengine
         {
             vector3 translation;
             vector2 scale;
+            vector2 rotation;
         };
 
         struct Uniforms
@@ -131,43 +132,11 @@ namespace Ligmengine
         // string shaderEnd = ")\"";
         //const char* source = gEngine.resourceManager.LoadStringFromTextFile(fullShaderPath).data();
         //std::cout << *source << std::endl;
-        const char* source = R"(
-				struct Uniforms {
-					projection: mat4x4f,
-				};
-
-				@group(0) @binding(0) var<uniform> uniforms: Uniforms;
-				@group(0) @binding(1) var texSampler: sampler;
-				@group(0) @binding(2) var texData: texture_2d<f32>;
-
-				struct VertexInput {
-					@location(0) position: vec2f,
-					@location(1) texcoords: vec2f,
-					@location(2) translation: vec3f,
-					@location(3) scale: f32,
-				};
-
-				struct VertexOutput {
-					@builtin(position) position: vec4f,
-					@location(0) texcoords: vec2f,
-				};
-
-				@vertex
-				fn vertex_shader_main( in: VertexInput ) -> VertexOutput {
-					var out: VertexOutput;
-					out.position = uniforms.projection * vec4f( vec3f( in.scale * in.position, 0.0 ) + in.translation, 1.0 );
-					out.texcoords = in.texcoords;
-					return out;
-				}
-
-				@fragment
-				fn fragment_shader_main( in: VertexOutput ) -> @location(0) vec4f {
-					let color = textureSample( texData, texSampler, in.texcoords ).rgba;
-					return color;
-				})";
+        string path = gEngine.resourceManager.GetFullAssetPath("shader.wgsl");
+        string source = gEngine.resourceManager.LoadStringFromTextFile(path);
         WGPUShaderModuleWGSLDescriptor code_desc = {};
         code_desc.chain.sType = WGPUSType_ShaderModuleWGSLDescriptor;
-        code_desc.code = source; // The shader source as a `char*`
+        code_desc.code = source.c_str(); // The shader source as a `char*`
         WGPUShaderModuleDescriptor shader_desc = {};
         shader_desc.nextInChain = &code_desc.chain;
 
@@ -209,7 +178,7 @@ namespace Ligmengine
                         // This data is per-instance. All four vertices will get the same value. Each instance of drawing the vertices will get a different value.
                         // The type, byte offset, and stride (bytes between elements) exactly match the array of `InstanceData` structs we will upload in our draw function.
                         .stepMode = WGPUVertexStepMode_Instance,
-                        .attributeCount = 2,
+                        .attributeCount = 3,
                         .attributes = to_ptr<WGPUVertexAttribute>({
                             // Translation as a 3D vector.
                             {
@@ -222,6 +191,12 @@ namespace Ligmengine
                                 .format = WGPUVertexFormat_Float32x2,
                                 .offset = offsetof(InstanceData, scale),
                                 .shaderLocation = 3
+                            },
+                            // Rotation as 2D vector
+                            {
+                                .format = WGPUVertexFormat_Float32x2,
+                                .offset = offsetof(InstanceData, rotation),
+                                .shaderLocation = 4
                             }
                             })
                     }
@@ -346,6 +321,7 @@ namespace Ligmengine
             d.scale.x *= 10;
             d.scale.y *= 10;
             d.translation = transform.position;
+            d.rotation = transform.rotation;
 
             wgpuQueueWriteBuffer(queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData));
 
