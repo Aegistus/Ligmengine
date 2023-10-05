@@ -10,6 +10,9 @@
 #include <ECS.h>
 #include <vector>
 #include <algorithm>
+#include <cmath>
+
+#define PI 3.14159
 
 using namespace glm;
 
@@ -312,16 +315,18 @@ namespace Ligmengine
             InstanceData d;
             Sprite sprite = *gEngine.ecs.GetComponent<SpriteRenderer>(entities[i]).sprite;
             Transform transform = gEngine.ecs.GetComponent<Transform>(entities[i]);
-            if (sprite.width < sprite.height) {
+            if (sprite.width < sprite.height)
+            {
                 d.scale = vec2(real(sprite.width / sprite.height), 1.0);
             }
-            else {
+            else 
+            {
                 d.scale = vec2(1.0, real(sprite.height) / sprite.width);
             }
-            d.scale.x *= 10;
-            d.scale.y *= 10;
+            d.scale *= 10;
             d.translation = transform.position;
-            d.rotation = transform.rotation;
+            d.rotation.x = std::cos(PI / 2 + transform.rotation);
+            d.rotation.y = std::sin(PI / 2 + transform.rotation);
 
             wgpuQueueWriteBuffer(queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData));
 
@@ -376,12 +381,10 @@ namespace Ligmengine
     // called when game window is resized
     void GraphicsManager::UpdateWindowSize()
     {
-
         if (swapchain != nullptr)
         {
             wgpuSwapChainRelease(swapchain);
         }
-
         swap_chain_format = wgpuSurfaceGetPreferredFormat(surface, adapter);
         int width, height;
         glfwGetFramebufferSize(window, &width, &height);

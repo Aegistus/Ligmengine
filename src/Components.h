@@ -15,8 +15,8 @@ namespace Ligmengine
 	struct Transform
 	{
 		vector3 position;
-		vector2 rotation;
-		vector2 scale;
+		float rotation;
+		vector2 scale = { 1,1 };
 	};
 
 	struct Script

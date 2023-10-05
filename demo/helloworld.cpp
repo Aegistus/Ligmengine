@@ -26,6 +26,7 @@ void StartupCallback()
 
     gEngine.ecs.GetComponent<Transform>(objOne).position = { 100,0,1 };
     gEngine.ecs.GetComponent<Transform>(objTwo).position = { 50,0,.5 };
+    gEngine.ecs.GetComponent<Transform>(objTwo).rotation = 30;
     gEngine.ecs.GetComponent<Transform>(objThree).position = { 0,0,0 };
 
     gEngine.ecs.GetComponent<SpriteRenderer>(objOne).sprite = gEngine.spriteLoader.GetSprite("Icon");

@@ -11,7 +11,7 @@ struct VertexInput {
 	@location(1) texcoords: vec2f,
 	@location(2) translation: vec3f,
 	@location(3) scale: vec2f,
-                @location(4) rotation: vec2f
+    @location(4) rotation: vec2f
 };
 
 struct VertexOutput {
@@ -22,7 +22,13 @@ struct VertexOutput {
 @vertex
 fn vertex_shader_main( in: VertexInput ) -> VertexOutput {
 	var out: VertexOutput;
-	out.position = uniforms.projection * vec4f( vec3f( in.position, 0.0 ) + in.translation, 1.0 );
+	var rotatedPos: vec2f = vec2f
+	(
+		in.position.x * in.rotation.y - in.position.y * in.rotation.x,
+		in.position.x * in.rotation.x + in.position.y * in.rotation.y
+	);
+	rotatedPos *= in.scale;
+	out.position = uniforms.projection * vec4f( vec3f( rotatedPos, 0.0 ) + in.translation, 1.0 );
 	out.texcoords = in.texcoords;
 	return out;
 }

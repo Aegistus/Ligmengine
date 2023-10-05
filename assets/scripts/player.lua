@@ -2,6 +2,7 @@
 
 local e = ...
 moveSpeed = 1
+rotationSpeed = 1
 transform = GetTransform(e)
 
 -- W
@@ -22,4 +23,12 @@ end
 -- D
 if GetKey(68) then
 	transform.position.x = transform.position.x + moveSpeed
+end
+
+if GetKey(81) then
+	transform.rotation = transform.rotation + rotationSpeed
+end
+
+if GetKey(69) then
+	transform.rotation = transform.rotation - rotationSpeed
 end
