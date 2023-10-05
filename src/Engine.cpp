@@ -46,6 +46,7 @@ namespace Ligmengine
 			// Manage timestep
 			double sleepTime = TIME_STEP - (glfwGetTime() - frameStart);
 			std::this_thread::sleep_for(std::chrono::duration<double>(sleepTime));
+			deltaTime = glfwGetTime() - frameStart;
 		}
 		Shutdown();
 	}

@@ -56,6 +56,7 @@ namespace Ligmengine
 				[](float f, const vector2& v1) -> vector2 { return f * v1; }
 			)
 		);
+		lua.set_function("GetDeltaTime", [&]() { return gEngine.deltaTime; });
 		// input manager functions
 		lua.set_function("GetKeyDown", [&](const int inputCode) { return gEngine.input.GetKeyDown(static_cast<InputCode>(inputCode)); });
 		lua.set_function("GetKeyUp", [&](const int inputCode) { return gEngine.input.GetKeyUp(static_cast<InputCode>(inputCode));  });

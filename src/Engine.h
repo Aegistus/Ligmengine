@@ -21,6 +21,7 @@ namespace Ligmengine
 	{
 		public:
 			bool quit = false;
+			float deltaTime;
 			GraphicsManager graphics;
 			InputManager input;
 			ResourceManager resourceManager;
