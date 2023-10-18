@@ -8,6 +8,7 @@
 #include <map.h>
 #include <InputCode.h>
 #include <functional>
+#include <filesystem>
 
 #define CAT(x, y) CAT_(x, y)
 #define CAT_(x, y) x ## y
@@ -21,6 +22,7 @@
 }
 
 using namespace sol;
+using namespace std::filesystem;
 
 namespace Ligmengine
 {
@@ -57,14 +59,23 @@ namespace Ligmengine
 			)
 		);
 		lua.set_function("GetDeltaTime", [&]() { return gEngine.deltaTime; });
+		// script manager functions
+		lua.set_function("LoadScript", [&](const string& name, const string& path) { return LoadScript(name, path); });
+
 		// input manager functions
 		lua.set_function("GetKeyDown", [&](const int inputCode) { return gEngine.input.GetKeyDown(static_cast<InputCode>(inputCode)); });
 		lua.set_function("GetKeyUp", [&](const int inputCode) { return gEngine.input.GetKeyUp(static_cast<InputCode>(inputCode));  });
 		lua.set_function("GetKey", [&](const int inputCode) { return gEngine.input.GetKey(static_cast<InputCode>(inputCode)); });
+
+		// sprite loader
+		lua.set_function("GetSprite", [&](const string& name) { return gEngine.spriteLoader.GetSprite(name); });
+
 		// sound manager functions
 		lua.set_function("PlaySound", [&](const string& name) { return gEngine.soundManager.PlaySound(name); });
+
 		// ecs functions
 		lua.set_function("CreateEntity", [&]() { return gEngine.ecs.CreateEntity(); });
+		lua.set_function("CreateEntity", [&](string name) { return gEngine.ecs.CreateEntity(name); });
 		lua.set_function("DestroyEntity", [&](EntityID e) { gEngine.ecs.DestroyEntity(e); });
 		// COMPONENTS
 		lua.new_usertype<Transform>
@@ -87,10 +98,18 @@ namespace Ligmengine
 				constructors<Script()>(),
 				"name", &Script::name
 			);
+		lua.new_usertype<RigidBody>
+			(
+				"RigidBody",
+				constructors<RigidBody()>(),
+				"useGravity", &RigidBody::useGravity,
+				"velocity", &RigidBody::velocity
+			);
 		// COMPONENT FUNCTIONS
 		COMPONENT_TEMPLATE(Transform);
 		COMPONENT_TEMPLATE(SpriteRenderer);
 		COMPONENT_TEMPLATE(Script);
+		COMPONENT_TEMPLATE(RigidBody);
 		
 		// application functions
 		lua.set_function("Quit", [&]() { gEngine.quit = true; });

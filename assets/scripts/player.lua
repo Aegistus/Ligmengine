@@ -2,33 +2,29 @@
 
 local e = ...
 moveSpeed = 10
-rotationSpeed = 10
+rotationSpeed = 50
 transform = GetTransform(e)
+w = 87
+s = 83
+a = 65
+d = 68
 
 -- W
-if GetKey(87) then
+if GetKey(w) then
 	transform.position.y = transform.position.y + moveSpeed * GetDeltaTime()
 end
 
 -- S
-if GetKey(83) then
+if GetKey(s) then
 	transform.position.y = transform.position.y - moveSpeed * GetDeltaTime()
 end
 
 -- A
-if GetKey(65) then
+if GetKey(a) then
 	transform.position.x = transform.position.x - moveSpeed * GetDeltaTime()
 end
 
 -- D
-if GetKey(68) then
+if GetKey(d) then
 	transform.position.x = transform.position.x + moveSpeed * GetDeltaTime()
-end
-
-if GetKey(81) then
-	transform.rotation = transform.rotation + rotationSpeed * GetDeltaTime()
-end
-
-if GetKey(69) then
-	transform.rotation = transform.rotation - rotationSpeed * GetDeltaTime()
 end

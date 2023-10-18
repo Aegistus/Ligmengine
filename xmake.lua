@@ -50,3 +50,17 @@ target("helloworld")
 
     add_files("demo/helloworld.cpp")
 
+target("GorillaGrind")
+    set_kind("binary")
+    set_languages("cxx20")
+    set_rundir("$(projectdir)")
+
+        -- Adds required packages.
+    add_packages("glfw")
+    add_packages("spdlog")
+    add_packages("soloud")
+    add_packages("wgpu-native", "glfw3webgpu")
+
+    add_deps("ligmengine")
+
+    add_files("demo/GorillaGrind.cpp")

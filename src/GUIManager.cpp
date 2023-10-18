@@ -118,6 +118,14 @@ namespace Ligmengine
 				ImGui::Text("Name: %s", s.name);
 			}
 		}
+		if (gEngine.ecs.HasComponent<RigidBody>(e))
+		{
+			if (ImGui::CollapsingHeader("Rigid Body"))
+			{
+				RigidBody rb = gEngine.ecs.GetComponent<RigidBody>(e);
+				ImGui::Text("Velocity: %.2f %.2f", rb.velocity);
+			}
+		}
 		ImGui::EndChild();
 
 		ImGui::End();

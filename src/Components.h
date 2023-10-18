@@ -28,4 +28,10 @@ namespace Ligmengine
 	{
 		string name;
 	};
+
+	struct RigidBody
+	{
+		bool useGravity;
+		vector2 velocity;
+	};
 }

@@ -325,8 +325,8 @@ namespace Ligmengine
             }
             d.scale *= 10;
             d.translation = transform.position;
-            d.rotation.x = std::cos(PI / 2 + transform.rotation);
-            d.rotation.y = std::sin(PI / 2 + transform.rotation);
+            d.rotation.x = std::cos(PI / 2 + transform.rotation * (PI / 180));
+            d.rotation.y = std::sin(PI / 2 + transform.rotation * (PI / 180));
 
             wgpuQueueWriteBuffer(queue, instance_buffer, i * sizeof(InstanceData), &d, sizeof(InstanceData));
 

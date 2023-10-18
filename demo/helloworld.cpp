@@ -20,21 +20,9 @@ void StartupCallback()
     gEngine.spriteLoader.LoadSprite("Gavin", "sprites/GavinDefault.png");
     gEngine.spriteLoader.LoadSprite("Ollie", "sprites/OllieCute.png");
 
-    EntityID objOne = gEngine.ecs.CreateEntity("Logo");
-    EntityID objTwo = gEngine.ecs.CreateEntity("Player");
-    EntityID objThree = gEngine.ecs.CreateEntity("Ollie");
-
-    gEngine.ecs.GetComponent<Transform>(objOne).position = { 100,0,1 };
-    gEngine.ecs.GetComponent<Transform>(objTwo).position = { 50,0,.5 };
-    gEngine.ecs.GetComponent<Transform>(objTwo).rotation = 30;
-    gEngine.ecs.GetComponent<Transform>(objThree).position = { 0,0,0 };
-
-    gEngine.ecs.GetComponent<SpriteRenderer>(objOne).sprite = gEngine.spriteLoader.GetSprite("Icon");
-    gEngine.ecs.GetComponent<SpriteRenderer>(objTwo).sprite = gEngine.spriteLoader.GetSprite("Gavin");
-    gEngine.ecs.GetComponent<SpriteRenderer>(objThree).sprite = gEngine.spriteLoader.GetSprite("Ollie");
-
+    gEngine.scriptManager.LoadScript("Startup", "scripts/startup.lua");
     gEngine.scriptManager.LoadScript("Player", "scripts/player.lua");
-    gEngine.ecs.GetComponent<Script>(objTwo).name = "Player";
+    gEngine.scriptManager.loadedScripts["Startup"]();
 }
 
 int main(int argc, const char* argv[]) {

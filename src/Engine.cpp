@@ -15,6 +15,7 @@ namespace Ligmengine
 		input.Startup();
 		soundManager.Startup();
 		scriptManager.Startup();
+		physics.Startup();
 		startupCallback();
 		RunGameLoop(callback);
 	}
@@ -24,6 +25,7 @@ namespace Ligmengine
 		input.Shutdown();
 		graphics.Shutdown();
 		soundManager.Shutdown();
+		physics.Shutdown();
 	}
 
 	void Engine::RunGameLoop(const UpdateCallback& callback)
@@ -39,6 +41,7 @@ namespace Ligmengine
 			input.Update();
 			scriptManager.Update();
 			graphics.Draw();
+			physics.Update();
 			callback();
 			// late updates
 			input.LateUpdate();
@@ -51,4 +54,3 @@ namespace Ligmengine
 		Shutdown();
 	}
 }
-

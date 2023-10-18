@@ -19,7 +19,6 @@ namespace Ligmengine
 	{
 		ifstream input_file(fullAssetPath);
 		string str = string((std::istreambuf_iterator<char>(input_file)), std::istreambuf_iterator<char>());
-		spdlog::info(str);
 		return str;
 	}
 }
