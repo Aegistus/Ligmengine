@@ -61,6 +61,7 @@ namespace Ligmengine
 		lua.set_function("GetDeltaTime", [&]() { return gEngine.deltaTime; });
 		// script manager functions
 		lua.set_function("LoadScript", [&](const string& name, const string& path) { return LoadScript(name, path); });
+		lua.set_function("RunScript", [&](const string& name) { return RunScript(name); });
 
 		// input manager functions
 		lua.set_function("GetKeyDown", [&](const int inputCode) { return gEngine.input.GetKeyDown(static_cast<InputCode>(inputCode)); });
