@@ -17,6 +17,10 @@ namespace Ligmengine
 		scriptManager.Startup();
 		physics.Startup();
 		startupCallback();
+		scriptManager.LoadScript("LoadAssets", "scripts/LoadAssets.lua");
+		scriptManager.RunScript("LoadAssets");
+		scriptManager.LoadScript("Start", "scripts/Start.lua");
+		scriptManager.RunScript("Start");
 		RunGameLoop(callback);
 	}
 

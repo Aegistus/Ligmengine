@@ -18,6 +18,7 @@ namespace Ligmengine
 
 			void Startup();
 			bool LoadScript(const string& name, const string& path);
+			bool RunScript(const string& name);
 			void Update();
 	};
 }

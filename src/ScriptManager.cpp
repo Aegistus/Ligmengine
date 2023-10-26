@@ -68,9 +68,11 @@ namespace Ligmengine
 		lua.set_function("GetKey", [&](const int inputCode) { return gEngine.input.GetKey(static_cast<InputCode>(inputCode)); });
 
 		// sprite loader
+		lua.set_function("LoadSprite", [&](const string& name, const string& path) { return gEngine.spriteLoader.LoadSprite(name, path); });
 		lua.set_function("GetSprite", [&](const string& name) { return gEngine.spriteLoader.GetSprite(name); });
 
 		// sound manager functions
+		lua.set_function("LoadSound", [&](const string& name, const string& path) { return gEngine.soundManager.LoadSound(name, path); });
 		lua.set_function("PlaySound", [&](const string& name) { return gEngine.soundManager.PlaySound(name); });
 
 		// ecs functions
@@ -126,6 +128,22 @@ namespace Ligmengine
 			return false;
 		}
 		return true;
+	}
+
+	bool ScriptManager::RunScript(const string& name)
+	{
+		if (!loadedScripts[name].valid())
+		{
+			sol::error err = loadedScripts[name];
+			spdlog::error("Attempting to run invalid script");
+			spdlog::error("	   Script name: {}", name);
+			return false;
+		}
+		else
+		{
+			loadedScripts[name]();
+			return true;
+		}
 	}
 
 	void ScriptManager::Update()
