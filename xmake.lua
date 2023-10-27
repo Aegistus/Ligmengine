@@ -35,22 +35,7 @@ target("ligmengine")
     -- Add all .cpp files in the `src` directory.
     add_files("src/*.cpp")
 
-target("helloworld")
-    set_kind("binary")
-    set_languages("cxx20")
-    set_rundir("$(projectdir)")
-
-    -- Adds required packages.
-    add_packages("glfw")
-    add_packages("spdlog")
-    add_packages("soloud")
-    add_packages("wgpu-native", "glfw3webgpu")
-
-    add_deps("ligmengine")
-
-    add_files("demo/helloworld.cpp")
-
-target("GorillaGrind")
+target("PrincessStarshine")
     set_kind("binary")
     set_languages("cxx20")
     set_rundir("$(projectdir)")
@@ -63,4 +48,4 @@ target("GorillaGrind")
 
     add_deps("ligmengine")
 
-    add_files("demo/GorillaGrind.cpp")
+    add_files("demo/PrincessStarshine.cpp")

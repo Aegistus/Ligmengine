@@ -11,4 +11,3 @@ LoadSound("OtherSound", "sounds/OtherSound.wav");
 LoadSprite("Player", "sprites/Player.png");
 
 --load scripts
-LoadScript("Player", "scripts/player.lua");

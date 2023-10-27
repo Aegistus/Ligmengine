@@ -65,9 +65,9 @@ namespace Ligmengine
 		lua.set_function("RunScript", [&](const string& name) { return RunScript(name); });
 
 		// input manager functions
-		lua.set_function("GetKeyDown", [&](const int inputCode) { return gEngine.input.GetKeyDown(static_cast<InputCode>(inputCode)); });
-		lua.set_function("GetKeyUp", [&](const int inputCode) { return gEngine.input.GetKeyUp(static_cast<InputCode>(inputCode));  });
-		lua.set_function("GetKey", [&](const int inputCode) { return gEngine.input.GetKey(static_cast<InputCode>(inputCode)); });
+		lua.set_function("GetKeyDown", [&](const InputCode input) { return gEngine.input.GetKeyDown(input); });
+		lua.set_function("GetKeyUp", [&](const InputCode input) { return gEngine.input.GetKeyUp(input);  });
+		lua.set_function("GetKey", [&](const InputCode input) { return gEngine.input.GetKey(input); });
 
 		// sprite loader
 		lua.set_function("LoadSprite", [&](const string& name, const string& path) { return gEngine.spriteLoader.LoadSprite(name, path); });
