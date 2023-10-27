@@ -41,7 +41,7 @@ namespace Ligmengine
 				quit = true;
 			}
 			double frameStart = glfwGetTime();
-			spdlog::info(frameStart);
+			//spdlog::info(frameStart);
 			input.Update();
 			scriptManager.Update();
 			graphics.Draw();
