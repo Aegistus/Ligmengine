@@ -323,6 +323,7 @@ namespace Ligmengine
             {
                 d.scale = vec2(1.0, real(sprite.height) / sprite.width);
             }
+            d.scale *= transform.scale;
             d.scale *= 10;
             d.translation = transform.position;
             d.rotation.x = std::cos(PI / 2 + transform.rotation * (PI / 180));
