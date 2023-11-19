@@ -4,10 +4,10 @@
 print("LOADING ASSETS")
 
 --load sounds
-LoadSound("ClickSound", "sounds/ClickSound.wav");
+LoadSound("ClickSound", "sounds/SFX_SelectSound_Quinn.ogg");
 LoadSound("OtherSound", "sounds/OtherSound.wav");
 
 --load sprites
-LoadSprite("Player", "sprites/Player.png");
+LoadSprite("Player", "sprites/Princess.png");
 
 --load scripts
