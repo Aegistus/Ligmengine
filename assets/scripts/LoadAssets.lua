@@ -12,3 +12,4 @@ LoadSprite("Player", "sprites/Princess.png")
 LoadSprite("Background", "sprites/HellLevelBackground.png")
 
 --load scripts
+--LoadScript("Player", "scripts/Player.lua")

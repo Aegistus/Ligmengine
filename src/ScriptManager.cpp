@@ -23,6 +23,7 @@
 
 using namespace sol;
 using namespace std::filesystem;
+namespace fs = std::filesystem;
 
 namespace Ligmengine
 {
@@ -146,6 +147,42 @@ namespace Ligmengine
 			loadedScripts[name]();
 			return true;
 		}
+	}
+	
+	bool ScriptManager::LoadAndRunScript(const string& path)
+	{
+		string fullPath = gEngine.resourceManager.GetFullAssetPath(path);
+		lua.script_file(fullPath);
+		return true;
+	}
+
+	void ScriptManager::LoadAllScriptsInFolder(const string& path)
+	{
+		string directoryPath = gEngine.resourceManager.GetFullAssetPath(path);
+		std::cout << "[Loading Scripts]" << std::endl;
+		for (const auto& file : fs::recursive_directory_iterator(directoryPath))
+		{
+			string filename = file.path().string();
+			string name;
+			// remove .lua from name
+			int startIndex = filename.find(".lua");
+			if (startIndex != -1)
+			{
+				name = filename.substr(0, startIndex);
+			}
+			name = name.substr(name.find_last_of("/\\") + 1);
+			filename = filename.substr(filename.find_last_of("/\\") + 1);
+			std::cout << name << std::endl;
+			loadedScripts[name] = lua.load_file(directoryPath + filename);
+			if (!loadedScripts[name].valid())
+			{
+				sol::error err = loadedScripts[name];
+				spdlog::error("Failed to load script: " + name);
+				spdlog::error(err.what());
+			}
+			std::cout << file.path() << std::endl;
+		}
+		spdlog::info("[Script Loading Completed]");
 	}
 
 	void ScriptManager::Update()

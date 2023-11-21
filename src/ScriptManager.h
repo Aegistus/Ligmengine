@@ -19,6 +19,8 @@ namespace Ligmengine
 			void Startup();
 			bool LoadScript(const string& name, const string& path);
 			bool RunScript(const string& name);
+			bool LoadAndRunScript(const string& path);
+			void LoadAllScriptsInFolder(const string& path);
 			void Update();
 		private:
 			void CreateInputCodeEnum();
