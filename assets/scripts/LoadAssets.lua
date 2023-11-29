@@ -10,6 +10,4 @@ LoadSound("OtherSound", "sounds/OtherSound.wav")
 --load sprites
 LoadSprite("Player", "sprites/Princess.png")
 LoadSprite("Background", "sprites/HellLevelBackground.png")
-
---load scripts
---LoadScript("Player", "scripts/Player.lua")
+LoadSprite("Enemy", "sprites/HellLevelShrimpEnemySpriteSheetRight.png")

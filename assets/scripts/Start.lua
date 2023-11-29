@@ -3,11 +3,11 @@
 -- DO NOT DELETE THIS SCRIPT
 
 print("STARTUP START")
-objOne = CreateEntity("Player")
+playerObject = CreateEntity("Player")
 
-GetTransform(objOne).position = vector3:new( 100,0,.1 )
-GetSpriteRenderer(objOne).sprite = GetSprite("Player")
-GetScript(objOne).name = "PlayerMovement"
+GetTransform(playerObject).position = vector3:new( 100,0,.1 )
+GetSpriteRenderer(playerObject).sprite = GetSprite("Player")
+GetScript(playerObject).name = "PlayerMovement"
 
 -- Add background
 background = CreateEntity("Background")
@@ -21,5 +21,21 @@ maxDashCharges = 3
 dashCharges = maxDashCharges
 maxDashCooldown = 2.0
 dashCooldown = maxDashCooldown
+dashSpeed = 40
+
+-- Enemy Stats
+enemySpawnCount = 3
+
+spawnedEnemies = {}
+spawnPoint = vector3:new(0, 0, .2)
+
+--Spawn Enemies
+for i = 0, enemySpawnCount do
+	enemy = CreateEntity("Enemy")
+	spawnedEnemies[i] = enemy
+	GetTransform(enemy).position = spawnPoint
+	GetSpriteRenderer(enemy).sprite = GetSprite("Enemy")
+	GetScript(enemy).name = "EnemyMovement"
+end
 
 print("STARTUP DONE")

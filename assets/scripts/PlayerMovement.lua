@@ -9,9 +9,8 @@ transform = GetTransform(e)
 
 --for n in pairs(_G) do print(n) end
 
--- LEFT_SHIFT
+-- Dash with SPACE
 if GetKeyDown(32) and dashCharges > 0 then
-    print("DASH")
     if GetKey(87) then
         transform.position.y = transform.position.y + dashSpeed
     end
