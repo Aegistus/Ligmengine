@@ -7,7 +7,7 @@ playerObject = CreateEntity("Player")
 
 GetTransform(playerObject).position = vector3:new( 100,0,.1 )
 GetSpriteRenderer(playerObject).sprite = GetSprite("Player")
-GetScript(playerObject).name = "PlayerMovement"
+GetScript(playerObject).name = "Player"
 
 -- Add background
 background = CreateEntity("Background")
@@ -23,8 +23,14 @@ maxDashCooldown = 2.0
 dashCooldown = maxDashCooldown
 dashSpeed = 40
 
+-- PLAYER Stats
+maxPlayerHealth = 100
+currentPlayerHealth = maxPlayerHealth
+
 -- Enemy Stats
 enemySpawnCount = 3
+enemyAttackRange = 20
+enemyDamage = 10
 
 spawnedEnemies = {}
 spawnPoint = vector3:new(0, 0, .2)
@@ -35,7 +41,7 @@ for i = 0, enemySpawnCount do
 	spawnedEnemies[i] = enemy
 	GetTransform(enemy).position = spawnPoint
 	GetSpriteRenderer(enemy).sprite = GetSprite("Enemy")
-	GetScript(enemy).name = "EnemyMovement"
+	GetScript(enemy).name = "Enemy"
 end
 
 print("STARTUP DONE")

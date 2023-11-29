@@ -53,3 +53,11 @@ end
 if GetKey(68) then
     transform.position.x = transform.position.x + moveSpeed * GetDeltaTime()
 end
+
+function ReducePlayerHealth(amount)
+	currentPlayerHealth = currentPlayerHealth - amount
+    print(currentPlayerHealth)
+	if currentPlayerHealth <= 0 then
+		Quit()
+	end
+end
