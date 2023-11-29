@@ -9,3 +9,9 @@ Thumbs.db
 .vs/Ligmengine/v16/Browse.VC.opendb
 *.ipch
 vsxmake2022/.vs/Ligmengine/v17/Browse.VC.opendb
+*.vsidx
+*.db
+*.db-shm
+*.db-wal
+*.bin
+*.vsidx
