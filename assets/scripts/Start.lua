@@ -19,7 +19,7 @@ GetSpriteRenderer(background).sprite = GetSprite("Background")
 -- Dash Stuff
 maxDashCharges = 3
 dashCharges = maxDashCharges
-maxDashCooldown = 3.0
+maxDashCooldown = 2.0
 dashCooldown = maxDashCooldown
 
 print("STARTUP DONE")

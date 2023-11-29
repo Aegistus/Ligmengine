@@ -3,16 +3,28 @@
 
 local e = ...
 moveSpeed = 50
+dashSpeed = 40
 rotationSpeed = 10
 transform = GetTransform(e)
 
 --for n in pairs(_G) do print(n) end
 
 -- LEFT_SHIFT
-if GetKeyDown(340) and dashCharges > 0 then
+if GetKeyDown(32) and dashCharges > 0 then
     print("DASH")
-    moveSpeed = moveSpeed * 50;
-    dashCharges = dashCharges - 1;
+    if GetKey(87) then
+        transform.position.y = transform.position.y + dashSpeed
+    end
+    if GetKey(83) then
+        transform.position.y = transform.position.y - dashSpeed
+    end
+    if GetKey(65) then
+        transform.position.x = transform.position.x - dashSpeed
+    end
+    if GetKey(68) then
+        transform.position.x = transform.position.x + dashSpeed
+    end
+    dashCharges = dashCharges - 1
 end
 
 if dashCharges < maxDashCharges then
