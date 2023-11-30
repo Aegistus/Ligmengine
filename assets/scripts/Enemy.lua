@@ -2,7 +2,7 @@
 local e = ...
 
 -- MOVEMENT
-moveSpeed = 40
+moveSpeed = 20
 transform = GetTransform(e)
 playerPos = GetTransform(playerObject).position
 

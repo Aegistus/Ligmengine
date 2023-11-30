@@ -56,6 +56,7 @@ end
 
 function ReducePlayerHealth(amount)
 	currentPlayerHealth = currentPlayerHealth - amount
+    healthBarTransform.scale.x = healthBarStartWidth * (currentPlayerHealth / maxPlayerHealth)
     print(currentPlayerHealth)
 	if currentPlayerHealth <= 0 then
 		Quit()
